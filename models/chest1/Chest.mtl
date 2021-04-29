@@ -1,0 +1,48 @@
+# Blender MTL File: 'Chest.blend'
+# Material Count: 4
+
+newmtl Black
+Ns 323.999994
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd Black Hair.jpg
+
+newmtl Gold
+Ns 650.249991
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd Gold_Base_Color.png
+refl C:\\Users\\victo\\OneDrive\\Desktop\\openGL\\Project\\Substance Textures\\Chest\\Gold_Metallic.png
+
+newmtl Steel
+Ns 323.999994
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd Steel_Base_Color.png
+refl C:\\Users\\victo\\OneDrive\\Desktop\\openGL\\Project\\Substance Textures\\Chest\\Steel_Metallic.png
+
+newmtl Wood
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd Wood_Base_Color.png

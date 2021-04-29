@@ -1,0 +1,24 @@
+﻿  main.cpp
+C:\Users\victo\OneDrive\Desktop\openGL\Project\shader.h(42,40): warning C4101: 'e': unreferenced local variable
+C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(13,7): warning C4101: 'x': unreferenced local variable
+C:\Users\victo\OneDrive\Desktop\openGL\Project\main.cpp(148,28): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\victo\OneDrive\Desktop\openGL\Project\main.cpp(167,40): warning C4305: 'argument': truncation from 'double' to 'GLclampf'
+C:\Users\victo\OneDrive\Desktop\openGL\Project\main.cpp(207,60): warning C4305: 'argument': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+C:\Users\victo\OneDrive\Desktop\openGL\Project\main.cpp(264,55): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\victo\OneDrive\Desktop\openGL\Project\main.cpp(272,56): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\victo\OneDrive\Desktop\openGL\Project\main.cpp(280,52): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\victo\OneDrive\Desktop\openGL\Project\main.cpp(288,53): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\victo\OneDrive\Desktop\openGL\Project\main.cpp(296,50): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\victo\OneDrive\Desktop\openGL\Project\main.cpp(304,52): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\victo\OneDrive\Desktop\openGL\Project\main.cpp(319,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\victo\OneDrive\Desktop\openGL\Project\main.cpp(320,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\victo\OneDrive\Desktop\openGL\Project\main.cpp(324,19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\victo\OneDrive\Desktop\openGL\Project\main.cpp(325,19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\victo\OneDrive\Desktop\openGL\Project\main.cpp(327,13): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\victo\OneDrive\Desktop\openGL\Project\main.cpp(328,13): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\victo\OneDrive\Desktop\openGL\Project\main.cpp(417,36): warning C4305: 'argument': truncation from 'double' to 'GLclampf'
+  Project.vcxproj -> C:\Users\victo\OneDrive\Desktop\openGL\Project\Debug\Project.exe
