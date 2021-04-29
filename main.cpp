@@ -30,7 +30,7 @@ glm::vec3 g_LightPos(1.0f, 1.0f, 1.3f);
 float yPos = 0.0f;
 
 
-Scene scene;
+Scene scene(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);

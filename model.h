@@ -19,7 +19,15 @@ unsigned int TextureFromFile(const char* path, const std::string& directory, boo
 class Model
 {
 public:
+
+	Model() = default;
+
 	Model(const char* path)
+	{
+		loadModel(path);
+	}
+
+	void LoadFromFile(const char* path)
 	{
 		loadModel(path);
 	}
@@ -29,11 +37,17 @@ public:
 		for (unsigned int i = 0; i < m_Meshes.size(); i++)
 			m_Meshes[i].Draw(shader);
 	}
+
+	void Clear()
+	{
+		m_Meshes.clear();
+		m_Directory.clear();
+		m_TexturesLoaded.clear();
+	}
 private:
 	std::vector<Mesh> m_Meshes;
 	std::string m_Directory;
 	std::vector<Texture> m_TexturesLoaded;
-	Material m_Material;
 
 	void loadModel(std::string path)
 	{
