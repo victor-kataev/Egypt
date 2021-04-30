@@ -147,10 +147,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h" />
+    <ClInclude Include="entity.h" />
     <ClInclude Include="material.h" />
     <ClInclude Include="materials.h" />
     <ClInclude Include="mesh.h" />
     <ClInclude Include="model.h" />
+    <ClInclude Include="params.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="shader.h" />
   </ItemGroup>

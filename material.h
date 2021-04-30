@@ -2,23 +2,27 @@
 
 #include "shader.h"
 
-class Material
+struct Material
 {
-public:
-
 	Material() = default;
 
-	Material(const std::shared_ptr<Shader>& shader, const glm::vec3 &ambient, const glm::vec3& diffuse, const glm::vec3& specular)
+	Material(const std::shared_ptr<Shader>& shader, const glm::vec3 &ambient, const glm::vec3& diffuse, const glm::vec3& specular, float shininess)
 	{
-		m_Shader = shader;
-		m_AmbientColor = ambient;
-		m_DiffuseColor = diffuse;
-		m_SpecularColor = specular;
+		Shader = shader;
+		AmbientColor = ambient;
+		DiffuseColor = diffuse;
+		SpecularColor = specular;
+		Shininess = shininess;
 	}
 
-private:
-	std::shared_ptr<Shader> m_Shader;
-	glm::vec3 m_AmbientColor;
-	glm::vec3 m_DiffuseColor;
-	glm::vec3 m_SpecularColor;
+	std::shared_ptr<Shader> GetShader()
+	{
+		return Shader;
+	}
+
+	std::shared_ptr<Shader> Shader;
+	glm::vec3 AmbientColor;
+	glm::vec3 DiffuseColor;
+	glm::vec3 SpecularColor;
+	float Shininess;
 };

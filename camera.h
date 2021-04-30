@@ -4,6 +4,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <vector>
 
+
+#include "params.h"
+
 // Defines several possible options for camera movement. Used as abstraction to stay away from window-system specific input methods
 enum Camera_Movement {
     FORWARD,
@@ -27,7 +30,7 @@ class Camera
 {
 public:
     // camera Attributes
-    glm::mat4 Projection;
+    glm::mat4 ProjectionMat;
     glm::vec3 Position;
     glm::vec3 Front;
     glm::vec3 Up;
@@ -45,6 +48,7 @@ public:
     Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH)
         : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
     {
+        ProjectionMat = glm::perspective(glm::radians(45.0f), (float)SCREEN_WIDTH / SCREEN_HEIGHT, 0.1f, 1000.f);
         Position = position;
         WorldUp = up;
         Yaw = yaw;
@@ -52,15 +56,15 @@ public:
         updateCameraVectors();
     }
     // constructor with scalar values
-    Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch)
-        : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
-    {
-        Position = glm::vec3(posX, posY, posZ);
-        WorldUp = glm::vec3(upX, upY, upZ);
-        Yaw = yaw;
-        Pitch = pitch;
-        updateCameraVectors();
-    }
+    //Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch)
+    //    : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
+    //{
+    //    Position = glm::vec3(posX, posY, posZ);
+    //    WorldUp = glm::vec3(upX, upY, upZ);
+    //    Yaw = yaw;
+    //    Pitch = pitch;
+    //    updateCameraVectors();
+    //}
 
     void PlaceTo(const glm::vec3& position, float yaw, float pitch)
     {
@@ -73,6 +77,11 @@ public:
     glm::mat4 GetViewMatrix()
     {
         return glm::lookAt(Position, Position + Front, Up);
+    }
+
+    glm::mat4 GetProjectionMatrix()
+    {
+        return ProjectionMat;
     }
 
     // processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)

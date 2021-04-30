@@ -11,15 +11,13 @@
 #include "camera.h"
 #include "model.h"
 #include "scene.h"
+#include "params.h"
 
-#define SCREEN_WIDTH 1024
-#define SCREEN_HEIGHT 768
-#define GL_PI 3.1415f
 
 float deltaTime = 0;
 float lastFrame = 0;
 
-Camera camera(glm::vec3(0.0, 0.0, 3.0));
+//scene.GetCamera() scene.GetCamera()(glm::vec3(0.0, 0.0, 3.0));
 float lastX = SCREEN_WIDTH / 2.0f;
 float lastY = SCREEN_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -30,7 +28,7 @@ glm::vec3 g_LightPos(1.0f, 1.0f, 1.3f);
 float yPos = 0.0f;
 
 
-Scene scene(SCREEN_WIDTH, SCREEN_HEIGHT);
+Scene scene;
 
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -52,9 +50,11 @@ int main()
     GLFWwindow* window = createWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Egypt");
     setUpWindow(window);
 
+    scene.Init();
+
     glEnable(GL_DEPTH_TEST);
     
-
+#if 0
     float vertices[] = {
         // positions          // normals           // texture coords
         -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
@@ -141,14 +141,14 @@ int main()
         glm::vec3(5.0f, 5.0f, 5.0f),
         glm::vec3(-3.0f, -3.0f, -3.0f)
     };
-
+#endif
     //render loop
     while (!glfwWindowShouldClose(window))
     {
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
-
+#if 0
         float time = currentFrame;
         float xPos = sin(time);
         float zPos = cos(time);
@@ -160,16 +160,18 @@ int main()
         //lightColor.x = sin(time * 2.0);
         //lightColor.y = sin(time * 0.7);
         //lightColor.z = sin(time * 1.3);
-
+#endif
 
         processInput(window);
-        //OnUpdate();
+        OnUpdate();
+        
+#if 0
         glClearColor(0.2, 0.3, 0.4, 1.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCREEN_WIDTH / SCREEN_HEIGHT, 0.1f, 1000.f);
         glm::mat4 model = glm::mat4(1.0f);
-        glm::mat4 view = camera.GetViewMatrix();
+        glm::mat4 view = scene.GetCamera().GetViewMatrix();
 
         model = glm::mat4(1.0f);
         model = glm::translate(model, g_LightPos);
@@ -196,7 +198,7 @@ int main()
         //lightingShader.setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
         //lightingShader.setVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
         lightingShader.setVec3("lightPos", g_LightPos);
-        lightingShader.setVec3("viewerPos", camera.Position);
+        lightingShader.setVec3("viewerPos", scene.GetCamera().Position);
 
         //lightingShader.setVec3("material.ambient", materials.jade.ambient);
         //lightingShader.setVec3("material.diffuse", materials.jade.diffuse);
@@ -237,15 +239,15 @@ int main()
         glBindVertexArray(cubeVAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);*/
         
-
+#endif
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
-
+#if 0
     glDeleteVertexArrays(1, &cubeVAO);
     glDeleteVertexArrays(1, &lightCubeVAO);
     glDeleteBuffers(1, &VBO);
-
+#endif
     glfwTerminate();
 
 
@@ -259,51 +261,51 @@ void processInput(GLFWwindow* window)
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-            camera.ProcessKeyboard(FORWARD, deltaTime * 10);
+            scene.GetCamera().ProcessKeyboard(FORWARD, deltaTime * 10);
         else if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-            camera.ProcessKeyboard(FORWARD, deltaTime * 0.1);
+            scene.GetCamera().ProcessKeyboard(FORWARD, deltaTime * 0.1);
         else
-            camera.ProcessKeyboard(FORWARD, deltaTime);
+            scene.GetCamera().ProcessKeyboard(FORWARD, deltaTime);
 
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
         if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-            camera.ProcessKeyboard(BACKWARD, deltaTime * 10);
+            scene.GetCamera().ProcessKeyboard(BACKWARD, deltaTime * 10);
         else if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-            camera.ProcessKeyboard(BACKWARD, deltaTime * 0.1);
+            scene.GetCamera().ProcessKeyboard(BACKWARD, deltaTime * 0.1);
         else
-            camera.ProcessKeyboard(BACKWARD, deltaTime);
+            scene.GetCamera().ProcessKeyboard(BACKWARD, deltaTime);
 
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
         if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-            camera.ProcessKeyboard(LEFT, deltaTime * 10);
+            scene.GetCamera().ProcessKeyboard(LEFT, deltaTime * 10);
         else if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-            camera.ProcessKeyboard(LEFT, deltaTime * 0.1);
+            scene.GetCamera().ProcessKeyboard(LEFT, deltaTime * 0.1);
         else
-            camera.ProcessKeyboard(LEFT, deltaTime);
+            scene.GetCamera().ProcessKeyboard(LEFT, deltaTime);
 
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-            camera.ProcessKeyboard(RIGHT, deltaTime * 10);
+            scene.GetCamera().ProcessKeyboard(RIGHT, deltaTime * 10);
         else if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-            camera.ProcessKeyboard(RIGHT, deltaTime * 0.1);
+            scene.GetCamera().ProcessKeyboard(RIGHT, deltaTime * 0.1);
         else
-            camera.ProcessKeyboard(RIGHT, deltaTime);
+            scene.GetCamera().ProcessKeyboard(RIGHT, deltaTime);
 
     if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
         if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-            camera.ProcessKeyboard(UP, deltaTime * 10);
+            scene.GetCamera().ProcessKeyboard(UP, deltaTime * 10);
         else if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-            camera.ProcessKeyboard(UP, deltaTime * 0.1);
+            scene.GetCamera().ProcessKeyboard(UP, deltaTime * 0.1);
         else
-            camera.ProcessKeyboard(UP, deltaTime);
+            scene.GetCamera().ProcessKeyboard(UP, deltaTime);
 
     if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
         if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-            camera.ProcessKeyboard(DOWN, deltaTime * 10);
+            scene.GetCamera().ProcessKeyboard(DOWN, deltaTime * 10);
         else if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-            camera.ProcessKeyboard(DOWN, deltaTime * 0.1);
+            scene.GetCamera().ProcessKeyboard(DOWN, deltaTime * 0.1);
         else
-            camera.ProcessKeyboard(DOWN, deltaTime);
+            scene.GetCamera().ProcessKeyboard(DOWN, deltaTime);
 
     if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
         yPos += 0.1f;
@@ -326,8 +328,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 
     lastX = xpos;
     lastY = ypos;
-
-    camera.ProcessMouseMovement(xoffset, yoffset);
+    scene.GetCamera().ProcessMouseMovement(xoffset, yoffset);
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
