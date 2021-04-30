@@ -22,7 +22,7 @@ float lastX = SCREEN_WIDTH / 2.0f;
 float lastY = SCREEN_HEIGHT / 2.0f;
 bool firstMouse = true;
 bool disabled = true;
-bool pressed_before = false;
+//bool pressed_before = false;
 
 glm::vec3 g_LightPos(1.0f, 1.0f, 1.3f);
 float yPos = 0.0f;
@@ -39,15 +39,23 @@ GLFWwindow* createWindow(int width, int height, const std::string title);
 void setUpWindow(GLFWwindow* window);
 void processInput(GLFWwindow* window);
 
-void OnUpdate();
+void OnRender();
 void OnUIRender();
 
-#include "materials.h"
 
 int main()
 {
     init();
     GLFWwindow* window = createWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Egypt");
+    glfwMakeContextCurrent(window);
+
+    bool err = glewInit() != GLEW_OK;
+    if (err)
+    {
+        fprintf(stderr, "Failed to initialize OpenGL loader!\n");
+        exit(-1);
+    }
+    
     setUpWindow(window);
 
     scene.Init();
@@ -148,6 +156,7 @@ int main()
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
+        float time = currentFrame;
 #if 0
         float time = currentFrame;
         float xPos = sin(time);
@@ -163,7 +172,7 @@ int main()
 #endif
 
         processInput(window);
-        OnUpdate();
+        OnRender();
         
 #if 0
         glClearColor(0.2, 0.3, 0.4, 1.0);
@@ -402,15 +411,6 @@ GLFWwindow* createWindow(int width, int height, const std::string title)
         exit(-1);
     }
 
-    glfwMakeContextCurrent(window);
-
-    bool err = glewInit() != GLEW_OK;
-    if (err)
-    {
-        fprintf(stderr, "Failed to initialize OpenGL loader!\n");
-        exit(-1);
-    }
-
     return window;
 }
 
@@ -422,10 +422,10 @@ void setUpWindow(GLFWwindow* window)
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
-void OnUpdate()
+void OnRender()
 {
     glClearColor(0.2, 0.3, 0.4, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    scene.Update();
+    scene.Render();
 }

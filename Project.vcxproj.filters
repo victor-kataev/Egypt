@@ -57,5 +57,6 @@
     <None Include="vertex_light_source.glsl" />
     <None Include="fragment_light_source.glsl" />
     <None Include="fragment.glsl" />
+    <None Include=".gitignore" />
   </ItemGroup>
 </Project>

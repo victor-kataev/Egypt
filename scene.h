@@ -19,34 +19,49 @@ public:
 		m_SunPosition = glm::vec3(10.0f);
 		m_SunColor = glm::vec3(1.0f);
 	}
-
+	 
 	void Init()
 	{
 		int i = 0;
 
-		
-
-		std::shared_ptr<Shader> shader = std::make_shared<Shader>("vertex.glsl", "fragment.glsl");
-		m_Shader = shader;
-		shader->use();
-		shader->setInt("material.texture_diffuse1", 0);
-		shader->setInt("material.texture_specular1", 1);
-		//shader->setVec3("lightPos", m_SunPosition);
-		//shader->setVec3("viewerPos", m_MainCamera.Position);
-
-		Material material(shader, glm::vec3(0.2f), glm::vec3(0.5f), m_SunColor, 32.0f);
+		m_LightingShader = std::make_shared<Shader>("vertex.glsl", "fragment.glsl");
+		m_LightingShader->use();
+		m_LightingShader->setInt("material.texture_diffuse1", 0);
+		m_LightingShader->setInt("material.texture_specular1", 1);
 
 		m_Models.emplace_back("models/egypt/pyramids.obj");
+		Material material(glm::vec3(0.2), glm::vec3(0.5), glm::vec3(1.0), 32.0, glm::vec3(0.0));
 
-		m_Entities.emplace_back(&m_Models[i], material, glm::vec3(0.0f));
+		m_Entities.emplace_back(&m_Models[i], material, "lighting", glm::vec3(0.0f));
 	}
 
-	void Update()
+	void Render()
 	{
+		float time = glfwGetTime();
+		time /= 10;
+		float radius = 20;
+		m_SunPosition = glm::vec3(radius * cos(time), radius * sin(time), m_SunPosition.z);
+
 		for (auto& entity : m_Entities)
 		{
-			entity.Update(m_MainCamera, m_SunPosition, m_SunColor);
-			entity.Draw();
+			if (entity.GetShaderType() == "lighting")
+			{
+				glm::mat4 proj = m_MainCamera->GetProjectionMatrix();
+				glm::mat4 view = m_MainCamera->GetViewMatrix();
+				glm::mat4 model = entity.GetModelMatrix();
+
+				m_LightingShader->use();
+				m_LightingShader->setMat4("projection", proj);
+				m_LightingShader->setMat4("view", view);
+				m_LightingShader->setMat4("model", model);
+				m_LightingShader->setVec3("lightPos", m_SunPosition);
+				m_LightingShader->setVec3("viewerPos", m_MainCamera->Position);
+				m_LightingShader->setFloat("material.shininess", entity.GetMaterial().Shininess);
+				m_LightingShader->setVec3("light.ambient", entity.GetMaterial().AmbientColor * m_SunColor);
+				m_LightingShader->setVec3("light.diffuse", entity.GetMaterial().DiffuseColor * m_SunColor);
+				m_LightingShader->setVec3("light.specular", entity.GetMaterial().SpecularColor * m_SunColor);
+				entity.Draw(*m_LightingShader);
+			}
 		}
 
 	}
@@ -67,5 +82,5 @@ private:
 	Camera * m_MainCamera;
 	glm::vec3 m_SunPosition;
 	glm::vec3 m_SunColor;
-	std::shared_ptr<Shader> m_Shader;
+	std::shared_ptr<Shader> m_LightingShader;
 };

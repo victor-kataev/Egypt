@@ -11,7 +11,6 @@
 #include <vector>
 #include <iostream>
 
-#include "material.h"
 #include "mesh.h"
 
 unsigned int TextureFromFile(const char* path, const std::string& directory, bool gamma = false);
@@ -32,7 +31,7 @@ public:
 		loadModel(path);
 	}
 
-	void Draw(Shader& shader)
+	void Draw(const Shader& shader)
 	{
 		for (unsigned int i = 0; i < m_Meshes.size(); i++)
 			m_Meshes[i].Draw(shader);
