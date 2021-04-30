@@ -1,5 +1,7 @@
 #pragma once
 
+#include <omp.h>
+
 #include "model.h"
 #include "camera.h"
 #include "material.h"
@@ -30,9 +32,16 @@ public:
 		m_LightingShader->setInt("material.texture_specular1", 1);
 
 		m_Models.emplace_back("models/egypt/pyramids.obj");
+		m_Models.emplace_back("models/egypt/temple1.obj");
+		m_Models.emplace_back("models/egypt/temple2.obj");
+		m_Models.emplace_back("models/egypt/Obelisk+mini pyramids.obj");
+
 		Material material(glm::vec3(0.2), glm::vec3(0.5), glm::vec3(1.0), 32.0, glm::vec3(0.0));
 
-		m_Entities.emplace_back(&m_Models[i], material, "lighting", glm::vec3(0.0f));
+		m_Entities.emplace_back(&m_Models[i++], material, "lighting", glm::vec3(0.0f), glm::vec3(10.0));
+		m_Entities.emplace_back(&m_Models[i++], material, "lighting", glm::vec3(50.0f, 0.0, 0.0), glm::vec3(1.0));
+		m_Entities.emplace_back(&m_Models[i++], material, "lighting", glm::vec3(-50.0f, 0.0, 0.0), glm::vec3(1.0));
+		m_Entities.emplace_back(&m_Models[i++], material, "lighting", glm::vec3(0.0f, 0.0, 50.0), glm::vec3(1.0));
 	}
 
 	void Render()

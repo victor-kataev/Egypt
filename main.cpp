@@ -57,10 +57,10 @@ int main()
     }
     
     setUpWindow(window);
+    glEnable(GL_DEPTH_TEST);
 
     scene.Init();
 
-    glEnable(GL_DEPTH_TEST);
     
 #if 0
     float vertices[] = {
