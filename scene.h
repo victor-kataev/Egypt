@@ -9,8 +9,13 @@ class Scene
 {
 public:
 	Scene()
-		: m_MainCamera(glm::vec3(0.0, 0.0, 3.0))
 	{
+		//Cameras
+		m_Cameras.emplace_back(glm::vec3(0.0, 0.0, 3.0), -90.0, 0.0);
+		m_Cameras.emplace_back(glm::vec3(-10.0, 0.0, 3.0), -90.0, 0.0);
+		m_Cameras.emplace_back(glm::vec3(10.0, 20.0, 3.0), -90.0, 0.0);
+		m_MainCamera = &m_Cameras[0];
+
 		m_SunPosition = glm::vec3(10.0f);
 		m_SunColor = glm::vec3(1.0f);
 	}
@@ -19,7 +24,7 @@ public:
 	{
 		int i = 0;
 
-		//Cameras
+		
 
 		std::shared_ptr<Shader> shader = std::make_shared<Shader>("vertex.glsl", "fragment.glsl");
 		m_Shader = shader;
@@ -44,25 +49,14 @@ public:
 			entity.Draw();
 		}
 
-#if 0
-
-		m_Shader->use();
-		glm::mat4 projection = m_MainCamera.GetProjectionMatrix();
-		glm::mat4 view = m_MainCamera.GetViewMatrix();
-		m_Shader->setMat4("projection", projection);
-		m_Shader->setMat4("view", view);
-		m_Shader->setVec3("lightPos", m_SunPosition);
-		m_Shader->setVec3("viewerPos", m_MainCamera.Position);
-		m_Shader->setVec3("light.ambient", m_SunColor * glm::vec3(0.2f));
-		m_Shader->setVec3("light.diffuse", m_SunColor * glm::vec3(0.5f));
-		m_Shader->setVec3("light.specular", m_SunColor);
-		glm::mat4 model = glm::mat4(1.0);
-		m_Shader->setMat4("model", model);
-#endif // 0
-
 	}
 
-	Camera& GetCamera()
+	void SetMainCamera(int id)
+	{
+		m_MainCamera = &m_Cameras[id];
+	}
+
+	Camera* GetCamera()
 	{
 		return m_MainCamera;
 	}
@@ -70,7 +64,7 @@ private:
 	std::vector<Model> m_Models;
 	std::vector<Entity> m_Entities;
 	std::vector<Camera> m_Cameras;
-	Camera m_MainCamera;
+	Camera * m_MainCamera;
 	glm::vec3 m_SunPosition;
 	glm::vec3 m_SunColor;
 	std::shared_ptr<Shader> m_Shader;

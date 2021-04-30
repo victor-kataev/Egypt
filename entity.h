@@ -13,16 +13,16 @@ public:
 		m_WorldPos = pos;
 	}
 
-	void Update(Camera& camera, const glm::vec3& sunPos, const glm::vec3& sunColor)
+	void Update(Camera* camera, const glm::vec3& sunPos, const glm::vec3& sunColor)
 	{
 		std::shared_ptr<Shader> shader = m_Material.Shader;
 		shader->use();
-		glm::mat4 projection = camera.GetProjectionMatrix();
-		glm::mat4 view = camera.GetViewMatrix();
+		glm::mat4 projection = camera->GetProjectionMatrix();
+		glm::mat4 view = camera->GetViewMatrix();
 		shader->setMat4("projection", projection);
 		shader->setMat4("view", view);
 		shader->setVec3("lightPos", sunPos);
-		shader->setVec3("viewerPos", camera.Position);
+		shader->setVec3("viewerPos", camera->Position);
 		shader->setVec3("light.ambient", sunColor * m_Material.AmbientColor);
 		shader->setVec3("light.diffuse", sunColor * m_Material.DiffuseColor);
 		shader->setVec3("light.specular", sunColor * m_Material.SpecularColor);
