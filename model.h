@@ -34,15 +34,9 @@ public:
 	void Draw(const Shader& shader)
 	{
 		for (unsigned int i = 0; i < m_Meshes.size(); i++)
-			m_Meshes[i].Draw(shader);
+			m_Meshes[i].DrawElements(shader);
 	}
 
-	void Clear()
-	{
-		m_Meshes.clear();
-		m_Directory.clear();
-		m_TexturesLoaded.clear();
-	}
 private:
 	std::vector<Mesh> m_Meshes;
 	std::string m_Directory;

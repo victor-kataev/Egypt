@@ -58,5 +58,7 @@
     <None Include="fragment_light_source.glsl" />
     <None Include="fragment.glsl" />
     <None Include=".gitignore" />
+    <None Include="skybox_vertex.glsl" />
+    <None Include="skybox_fragment.glsl" />
   </ItemGroup>
 </Project>

@@ -105,6 +105,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -160,6 +161,8 @@
     <None Include=".gitignore" />
     <None Include="fragment_light_source.glsl" />
     <None Include="fragment.glsl" />
+    <None Include="skybox_fragment.glsl" />
+    <None Include="skybox_vertex.glsl" />
     <None Include="vertex.glsl" />
     <None Include="vertex1.glsl" />
     <None Include="vertex_light_source.glsl" />
