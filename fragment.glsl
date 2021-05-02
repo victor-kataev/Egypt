@@ -74,6 +74,8 @@ struct SpotlightLight
 //uniform vec3 lightPos;
 uniform vec3 viewerPos;
 //uniform float time;
+uniform vec3 SunColor;
+uniform vec3 SunPosition;
 
 uniform Material material;
 //uniform Light light;
@@ -158,7 +160,7 @@ vec3 DirLightImpact(vec3 normal)
 	vec3 viewerDir = normalize(viewerPos - FragPos);
 	float specularImpact = pow(max(dot(reflected, viewerDir), 0.0), material.shininess);
 
-	vec3 ambient = dirLight.ambient * vec3(texture(material.texture_diffuse1, TexCoords));
+	vec3 ambient = dirLight.ambient * SunColor * vec3(texture(material.texture_diffuse1, TexCoords));
 	vec3 diffuse = dirLight.diffuse * diffuseImpact * vec3(texture(material.texture_diffuse1, TexCoords));
 	vec3 specular = dirLight.specular * specularImpact * vec3(texture(material.texture_specular1, TexCoords));
 

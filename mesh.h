@@ -8,6 +8,12 @@
 
 #include "shader.h"
 
+
+typedef unsigned int VertexBitfield;
+
+#define NORMALS_BIT 0x1
+#define TEXCOORDS_BIT 0x2
+
 struct Vertex
 {
 	glm::vec3 position;
@@ -27,11 +33,18 @@ class Mesh
 {
 public:
 	std::vector<Vertex> m_Vertices;
+	std::vector<float> m_VerticesFloat;
 	std::vector<unsigned int> m_Indices;
 	std::vector<Texture> m_Textures;
 
-	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
-	void DrawElements(const Shader &shader);
+	Mesh(const std::vector<float>& verts, VertexBitfield mask);
+	Mesh(const std::vector<float>& verts, const std::vector<unsigned int>& indices, VertexBitfield mask);
+	Mesh(const std::vector<float>& verts, const std::vector<unsigned int>& indices, const std::vector<Texture>& textures);
+	Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, const std::vector<Texture>& textures);
+
+	void DrawElements(const Shader &shader) const;
+	void DrawElements() const;
+	void DrawArrays() const;
 
 private:
 	unsigned int VAO, VBO, EBO;

@@ -97,7 +97,7 @@ public:
 		//m_Models.emplace_back("models/egypt/temple2.obj");
 		//m_Models.emplace_back("models/egypt/Obelisk+mini pyramids.obj");
 
-		Material material(glm::vec3(0.2), glm::vec3(0.5), glm::vec3(1.0), 32.0, glm::vec3(0.0));
+		Material material(glm::vec3(0.2), glm::vec3(0.5), glm::vec3(1.0), 32.0);
 
 		m_Entities.emplace_back(&m_Models[i++], material, "lighting", glm::vec3(0.0f), glm::vec3(10.0));
 		//m_Entities.emplace_back(&m_Models[i++], material, "lighting", glm::vec3(50.0f, 0.0, 0.0), glm::vec3(1.0));
@@ -113,24 +113,31 @@ public:
 		//m_SunPosition = glm::vec3(radius * cos(time), radius * sin(time), m_SunPosition.z);
 		glm::vec3 lightDir(-0.5f, -0.9, 0.8);
 
-		//drawSkybox(time);
+		drawSkybox(time);
+
+		glm::mat4 proj = m_MainCamera->GetProjectionMatrix();
+		glm::mat4 view = m_MainCamera->GetViewMatrix();
+
+		m_LightingShader->use();
+		m_LightingShader->setMat4("projection", proj);
+		m_LightingShader->setMat4("view", view);
+		m_LightingShader->setVec3("SunColor", m_SunColor);
+		m_LightingShader->setVec3("SunPositon", m_SunPosition);
+
 
 		for (auto& entity : m_Entities)
 		{
 			if (entity.GetShaderType() == "lighting")
 			{
-				glm::mat4 proj = m_MainCamera->GetProjectionMatrix();
-				glm::mat4 view = m_MainCamera->GetViewMatrix();
+				
 				glm::mat4 model = entity.GetModelMatrix();
 
-				m_LightingShader->use();
-				m_LightingShader->setMat4("projection", proj);
-				m_LightingShader->setMat4("view", view);
+				
 				m_LightingShader->setMat4("model", model);
 				m_LightingShader->setVec3("viewerPos", m_MainCamera->Position);
 				m_LightingShader->setFloat("material.shininess", entity.GetMaterial().Shininess);
 				m_LightingShader->setVec3("dirLight.dir", lightDir);
-				m_LightingShader->setVec3("dirLight.ambient", entity.GetMaterial().AmbientColor * m_SunColor);
+				m_LightingShader->setVec3("dirLight.ambient", entity.GetMaterial().AmbientColor);
 				m_LightingShader->setVec3("dirLight.diffuse", entity.GetMaterial().DiffuseColor * m_SunColor);
 				m_LightingShader->setVec3("dirLight.specular", entity.GetMaterial().SpecularColor * m_SunColor);
 
@@ -174,6 +181,7 @@ public:
 	{
 		return m_MainCamera;
 	}
+
 private:
 	std::vector<Model> m_Models;
 	std::vector<Entity> m_Entities;
@@ -184,9 +192,9 @@ private:
 	std::shared_ptr<Shader> m_LightingShader;
 	std::shared_ptr<Shader> m_SkyboxShader;
 	std::vector<std::shared_ptr<Shader>> m_Shaders;
+	Model m_Skybox;
 	
 	//tmp
-	unsigned int skyVAO;
 	unsigned int cubeMapTextureDay;
 	unsigned int cubeMapTextureNight;
 	std::vector<glm::vec3> pointLightPositions;
@@ -194,7 +202,7 @@ private:
 private:
 	void createSkybox()
 	{
-		float skyboxVerts[] = {
+		std::vector<float> skyboxVerts = {
 			-1.0f,  1.0f, -1.0f,
 			-1.0f, -1.0f, -1.0f,
 			 1.0f, -1.0f, -1.0f,
@@ -259,15 +267,7 @@ private:
 			"skybox/skybox/back.jpg",
 		};
 
-		glGenVertexArrays(1, &skyVAO);
-		glBindVertexArray(skyVAO);
-
-		unsigned int skyVBO;
-		glGenBuffers(1, &skyVBO);
-		glBindBuffer(GL_ARRAY_BUFFER, skyVBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVerts), skyboxVerts, GL_STATIC_DRAW);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-		glEnableVertexAttribArray(0);
+		m_Skybox.CommitGeometry(skyboxVerts);
 
 		cubeMapTextureDay = loadCubemapTexture(facesDay);
 		cubeMapTextureNight = loadCubemapTexture(facesNight);
@@ -284,12 +284,11 @@ private:
 		m_SkyboxShader->setFloat("time", abs(sin(time / 2)));
 
 
-		glBindVertexArray(skyVAO);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMapTextureDay);
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMapTextureNight);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		m_Skybox.DrawArrays();
 		glDepthMask(GL_TRUE);
 	}
 };

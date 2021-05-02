@@ -31,10 +31,27 @@ public:
 		loadModel(path);
 	}
 
-	void Draw(const Shader& shader)
+	void CommitGeometry(const std::vector<float> & verts)
+	{
+		m_Meshes.emplace_back(verts, 0);
+	}
+
+	void DrawElements(const Shader& shader) const
 	{
 		for (unsigned int i = 0; i < m_Meshes.size(); i++)
 			m_Meshes[i].DrawElements(shader);
+	}
+
+	void DrawElements() const
+	{
+		for (unsigned int i = 0; i < m_Meshes.size(); i++)
+			m_Meshes[i].DrawElements();
+	}
+
+	void DrawArrays() const
+	{
+		for (unsigned int i = 0; i < m_Meshes.size(); i++)
+			m_Meshes[i].DrawArrays();
 	}
 
 private:

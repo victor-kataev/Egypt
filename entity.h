@@ -23,7 +23,7 @@ public:
 
 	void Draw(const Shader& shader) const
 	{
-		m_Model->Draw(shader);
+		m_Model->DrawElements(shader);
 	}
 
 	Material& GetMaterial()
