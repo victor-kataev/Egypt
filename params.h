@@ -1,3 +1,3 @@
-#define SCREEN_WIDTH 1024
-#define SCREEN_HEIGHT 768
+#define SCREEN_WIDTH 1440
+#define SCREEN_HEIGHT 900
 #define GL_PI 3.1415f

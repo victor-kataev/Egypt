@@ -58,10 +58,32 @@ public:
 	{
 		int i = 0;
 
+		pointLightPositions.push_back(glm::vec3(-150.0, 50.0, -100.0));
+		pointLightPositions.push_back(glm::vec3(50.0, 2.0, -10.0));
+		pointLightPositions.push_back(glm::vec3(-70.0, 10.0, -400.0));
+
 		m_LightingShader = std::make_shared<Shader>("vertex.glsl", "fragment.glsl");
 		m_LightingShader->use();
 		m_LightingShader->setInt("material.texture_diffuse1", 0);
 		m_LightingShader->setInt("material.texture_specular1", 1);
+		
+		m_LightingShader->setFloat("spotlight.constant", 1.0);
+		m_LightingShader->setFloat("spotlight.linear", 0.007);
+		m_LightingShader->setFloat("spotlight.quadratic", 0.0002);
+		
+		m_LightingShader->setInt("nPointLights", 3);
+		m_LightingShader->setFloat("pointLight[0].constant", 1.0);
+		m_LightingShader->setFloat("pointLight[0].linear", 0.007);
+		m_LightingShader->setFloat("pointLight[0].quadratic", 0.0002);
+
+		m_LightingShader->setFloat("pointLight[1].constant", 1.0);
+		m_LightingShader->setFloat("pointLight[1].linear", 0.007);
+		m_LightingShader->setFloat("pointLight[1].quadratic", 0.0002);
+
+		m_LightingShader->setFloat("pointLight[2].constant", 1.0);
+		m_LightingShader->setFloat("pointLight[2].linear", 0.007);
+		m_LightingShader->setFloat("pointLight[2].quadratic", 0.0002);
+
 
 		m_SkyboxShader = std::make_shared<Shader>("skybox_vertex.glsl", "skybox_fragment.glsl");
 		m_SkyboxShader->use();
@@ -70,15 +92,15 @@ public:
 		createSkybox();
 
 
-		//m_Models.emplace_back("models/egypt/pyramids.obj");
-		m_Models.emplace_back("models/egypt/temple1.obj");
+		m_Models.emplace_back("models/egypt/pyramids.obj");
+		//m_Models.emplace_back("models/egypt/temple1.obj");
 		//m_Models.emplace_back("models/egypt/temple2.obj");
 		//m_Models.emplace_back("models/egypt/Obelisk+mini pyramids.obj");
 
 		Material material(glm::vec3(0.2), glm::vec3(0.5), glm::vec3(1.0), 32.0, glm::vec3(0.0));
 
-		//m_Entities.emplace_back(&m_Models[i++], material, "lighting", glm::vec3(0.0f), glm::vec3(10.0));
-		m_Entities.emplace_back(&m_Models[i++], material, "lighting", glm::vec3(50.0f, 0.0, 0.0), glm::vec3(1.0));
+		m_Entities.emplace_back(&m_Models[i++], material, "lighting", glm::vec3(0.0f), glm::vec3(10.0));
+		//m_Entities.emplace_back(&m_Models[i++], material, "lighting", glm::vec3(50.0f, 0.0, 0.0), glm::vec3(1.0));
 		//m_Entities.emplace_back(&m_Models[i++], material, "lighting", glm::vec3(-50.0f, 0.0, 0.0), glm::vec3(1.0));
 		//m_Entities.emplace_back(&m_Models[i++], material, "lighting", glm::vec3(0.0f, 0.0, 50.0), glm::vec3(1.0));
 	}
@@ -86,11 +108,12 @@ public:
 	void Render()
 	{
 		float time = glfwGetTime();
-		time /= 10;
+		time /= 2;
 		float radius = 20;
-		m_SunPosition = glm::vec3(radius * cos(time), radius * sin(time), m_SunPosition.z);
+		//m_SunPosition = glm::vec3(radius * cos(time), radius * sin(time), m_SunPosition.z);
+		glm::vec3 lightDir(-0.5f, -0.9, 0.8);
 
-		drawSkybox(time);
+		//drawSkybox(time);
 
 		for (auto& entity : m_Entities)
 		{
@@ -104,12 +127,38 @@ public:
 				m_LightingShader->setMat4("projection", proj);
 				m_LightingShader->setMat4("view", view);
 				m_LightingShader->setMat4("model", model);
-				m_LightingShader->setVec3("lightPos", m_SunPosition);
 				m_LightingShader->setVec3("viewerPos", m_MainCamera->Position);
 				m_LightingShader->setFloat("material.shininess", entity.GetMaterial().Shininess);
-				m_LightingShader->setVec3("light.ambient", entity.GetMaterial().AmbientColor * m_SunColor);
-				m_LightingShader->setVec3("light.diffuse", entity.GetMaterial().DiffuseColor * m_SunColor);
-				m_LightingShader->setVec3("light.specular", entity.GetMaterial().SpecularColor * m_SunColor);
+				m_LightingShader->setVec3("dirLight.dir", lightDir);
+				m_LightingShader->setVec3("dirLight.ambient", entity.GetMaterial().AmbientColor * m_SunColor);
+				m_LightingShader->setVec3("dirLight.diffuse", entity.GetMaterial().DiffuseColor * m_SunColor);
+				m_LightingShader->setVec3("dirLight.specular", entity.GetMaterial().SpecularColor * m_SunColor);
+
+				m_LightingShader->setVec3("spotlight.position", m_MainCamera->Position);
+				m_LightingShader->setVec3("spotlight.dir", m_MainCamera->Front);
+				m_LightingShader->setVec3("spotlight.ambient", entity.GetMaterial().AmbientColor * m_SunColor);
+				m_LightingShader->setVec3("spotlight.diffuse", entity.GetMaterial().DiffuseColor * m_SunColor);
+				m_LightingShader->setVec3("spotlight.specular", entity.GetMaterial().SpecularColor * m_SunColor);
+				m_LightingShader->setFloat("spotlight.cutOff", glm::cos(glm::radians(12.5f)));
+				m_LightingShader->setFloat("spotlight.outerCutOff", glm::cos(glm::radians(17.5f)));
+
+				m_LightingShader->setVec3("pointLight[0].position", pointLightPositions[0]);
+				m_LightingShader->setVec3("pointLight[0].ambient", entity.GetMaterial().AmbientColor * m_SunColor);
+				m_LightingShader->setVec3("pointLight[0].diffuse", entity.GetMaterial().DiffuseColor * m_SunColor);
+				m_LightingShader->setVec3("pointLight[0].specular", entity.GetMaterial().SpecularColor * m_SunColor);
+				
+				m_LightingShader->setVec3("pointLight[1].position", pointLightPositions[1]);
+				m_LightingShader->setVec3("pointLight[1].ambient", entity.GetMaterial().AmbientColor * m_SunColor);
+				m_LightingShader->setVec3("pointLight[1].diffuse", entity.GetMaterial().DiffuseColor * m_SunColor);
+				m_LightingShader->setVec3("pointLight[1].specular", entity.GetMaterial().SpecularColor * m_SunColor);
+
+				m_LightingShader->setVec3("pointLight[2].position", pointLightPositions[2]);
+				m_LightingShader->setVec3("pointLight[2].ambient", entity.GetMaterial().AmbientColor * m_SunColor);
+				m_LightingShader->setVec3("pointLight[2].diffuse", entity.GetMaterial().DiffuseColor * m_SunColor);
+				m_LightingShader->setVec3("pointLight[2].specular", entity.GetMaterial().SpecularColor * m_SunColor);
+
+				//m_LightingShader->setVec3("light.position", m_MainCamera->Position);
+				//m_LightingShader->setVec3("light.dir", m_MainCamera->Front);
 				entity.Draw(*m_LightingShader);
 			}
 		}
@@ -135,9 +184,12 @@ private:
 	std::shared_ptr<Shader> m_LightingShader;
 	std::shared_ptr<Shader> m_SkyboxShader;
 	std::vector<std::shared_ptr<Shader>> m_Shaders;
+	
+	//tmp
 	unsigned int skyVAO;
 	unsigned int cubeMapTextureDay;
 	unsigned int cubeMapTextureNight;
+	std::vector<glm::vec3> pointLightPositions;
 
 private:
 	void createSkybox()
