@@ -9,6 +9,17 @@
 #include "utilities.h"
 
 
+#define MPYRAMID1 0
+#define MPYRAMID2 1
+#define MPYRAMID3 2
+#define MTEMPLE1 3
+#define MTEMPLE2 4
+#define MTEMPLE3 5
+#define MOBELISK 6
+#define MHOUSES1 7
+#define MHOUSES2 8
+#define MHOUSES3 9
+
 static unsigned int loadCubemapTexture(std::vector<std::string> faces)
 {
 	unsigned int texId;
@@ -45,7 +56,7 @@ class Map
 {
 public:
 	Map(unsigned char* img, int hfWidth, int hfHeight, int width, int height, Material material)
-		: m_Heightfield(img, hfWidth, hfHeight), m_MapDim(glm::ivec2(width, height)), m_HeightPrcnt(1.0), m_Origin(-256.0)
+		: m_Heightfield(img, hfWidth, hfHeight), m_MapDim(glm::ivec2(width, height)), m_HeightPrcnt(1.0), m_Origin(-512.0, -768.0)
 	{
 		std::vector<Vertex> vertices = ComposeVertices();
 		std::vector<unsigned int> indices = ComposeIndices();
@@ -266,17 +277,36 @@ public:
 		createSkybox();
 
 
-		m_Models.emplace_back("models/egypt/pyramids.obj");
-		//m_Models.emplace_back("models/egypt/temple1.obj");
-		//m_Models.emplace_back("models/egypt/temple2.obj");
-		//m_Models.emplace_back("models/egypt/Obelisk+mini pyramids.obj");
+		m_Models.emplace_back("resources/models/egypt/pyramid1.obj");
+		m_Models.emplace_back("resources/models/egypt/pyramid2.obj");
+		m_Models.emplace_back("resources/models/egypt/pyramid3.obj");
+		m_Models.emplace_back("resources/models/egypt/temple1.obj");
+		//m_Models.emplace_back("resources/models/egypt/temple2.obj");
+		//m_Models.emplace_back("resources/models/egypt/temple3.obj");
+		//m_Models.emplace_back();
+		//m_Models.emplace_back();
+		m_Models.emplace_back();
+		m_Models.emplace_back();
+		m_Models.emplace_back("resources/models/egypt/obelisk.obj");
+		m_Models.emplace_back("resources/models/egypt/houses1.obj");
+		m_Models.emplace_back("resources/models/egypt/houses2.obj");
+		m_Models.emplace_back("resources/models/egypt/houses3.obj");
 
 		Material material(glm::vec3(0.2), glm::vec3(0.5), glm::vec3(1.0), 32.0);
 
-		m_Entities.emplace_back(&m_Models[i++], material, "lighting", glm::vec3(0.0f), glm::vec3(10.0));
-		//m_Entities.emplace_back(&m_Models[i++], material, "lighting", glm::vec3(50.0f, 0.0, 0.0), glm::vec3(1.0));
-		//m_Entities.emplace_back(&m_Models[i++], material, "lighting", glm::vec3(-50.0f, 0.0, 0.0), glm::vec3(1.0));
-		//m_Entities.emplace_back(&m_Models[i++], material, "lighting", glm::vec3(0.0f, 0.0, 50.0), glm::vec3(1.0));
+		m_Entities.emplace_back(&m_Models[MPYRAMID1], material, "lighting", glm::vec3(0.0f, 0.0f, -310.0f), glm::vec3(8.0));
+		m_Entities.emplace_back(&m_Models[MPYRAMID2], material, "lighting", glm::vec3(300.0f, 0.0, -280.0), glm::vec3(8.0));
+		m_Entities.emplace_back(&m_Models[MPYRAMID3], material, "lighting", glm::vec3(-300.0f, 0.0, -180.0), glm::vec3(8.0));
+		m_Entities.emplace_back(&m_Models[MTEMPLE1], material, "lighting", glm::vec3(-90.0f, 0.0, -140.0), glm::vec3(1.0), 180.0f);
+		//m_Entities.emplace_back(&m_Models[MTEMPLE2], material, "lighting", glm::vec3(0.0f, 0.0, 0.0), glm::vec3(2.0));
+		//m_Entities.emplace_back(&m_Models[MTEMPLE3], material, "lighting", glm::vec3(100.0f, 0.0, 0.0), glm::vec3(2.0));
+		m_Entities.emplace_back(&m_Models[MOBELISK], material, "lighting", glm::vec3(-90.0f, 0.01, -180.0), glm::vec3(2.0));
+		m_Entities.emplace_back(&m_Models[MHOUSES1], material, "lighting", glm::vec3(-100.0f, 3.0, 100.0), glm::vec3(1.0));
+		m_Entities.emplace_back(&m_Models[MHOUSES2], material, "lighting", glm::vec3(0.0f, 3.0, 100.0), glm::vec3(1.0));
+		m_Entities.emplace_back(&m_Models[MHOUSES3], material, "lighting", glm::vec3(-156.0f, 0.0, -180.0), glm::vec3(2.0));
+		m_Entities.emplace_back(&m_Models[MHOUSES3], material, "lighting", glm::vec3(-156.0f, 0.0, -140.0), glm::vec3(2.0));
+		m_Entities.emplace_back(&m_Models[MHOUSES3], material, "lighting", glm::vec3(-150.0f, 0.0, -100.0), glm::vec3(2.0));
+		m_Entities.emplace_back(&m_Models[MHOUSES3], material, "lighting", glm::vec3(-50.0f, 0.0, -100.0), glm::vec3(2.0));
 
 		m_MapShader = std::make_shared<Shader>("map_vertex.glsl", "fragment.glsl");
 		m_MapShader->use();
@@ -308,7 +338,7 @@ public:
 		float time = glfwGetTime();
 		time /= 2;
 		float radius = 20;
-		//m_LightDir = glm::vec3(cos(time),sin(time), m_LightDir.z);
+		m_LightDir = glm::vec3(cos(time),sin(time), m_LightDir.z);
 
 		drawSkybox(time);
 		drawMap();
@@ -450,12 +480,12 @@ private:
 
 		std::vector<std::string> facesDay
 		{
-			"skybox/skybox2/right.jpg",
-			"skybox/skybox2/left.jpg",
-			"skybox/skybox2/top.jpg",
-			"skybox/skybox2/bottom.jpg",
-			"skybox/skybox2/front.jpg",
-			"skybox/skybox2/back.jpg",
+			"skybox/skybox1/skybox_right.jpg",
+			"skybox/skybox1/skybox_left.jpg",
+			"skybox/skybox1/skybox_top.jpg",
+			"skybox/skybox1/skybox_bottom.jpg",
+			"skybox/skybox1/skybox_front.jpg",
+			"skybox/skybox1/skybox_back1.jpg",
 		};
 
 		std::vector<std::string> facesNight
@@ -465,6 +495,7 @@ private:
 			"skybox/skybox/top.jpg",
 			"skybox/skybox/bottom.jpg",
 			"skybox/skybox/front.jpg",
+			//"skybox/skybox1/skybox_back1.jpg",
 			"skybox/skybox/back.jpg",
 		};
 
@@ -482,13 +513,14 @@ private:
 		glm::mat4 view = glm::mat4(glm::mat3(m_MainCamera->GetViewMatrix()));
 		m_SkyboxShader->setMat4("projection", proj);
 		m_SkyboxShader->setMat4("view", view);
-		m_SkyboxShader->setFloat("time", abs(sin(time / 2)));
+		//m_SkyboxShader->setFloat("time", abs(sin(time / 2)));
+		m_SkyboxShader->setFloat("time", 0.0);
 
 
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMapTextureDay);
-		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMapTextureNight);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMapTextureDay);
 		m_Skybox.DrawArrays();
 		glDepthMask(GL_TRUE);
 	}
@@ -497,7 +529,7 @@ private:
 	void createMap(Material material)
 	{
 		int width, height, nrComponents;
-		unsigned char* data = stbi_load("map_black.png", &width, &height, &nrComponents, 1);
+		unsigned char* data = stbi_load("resources/maps/map_big.png", &width, &height, &nrComponents, 1);
 
 		std::cout << "channels map: " << nrComponents << std::endl;
 		m_Map = std::make_shared<Map>(data, width, height, width, height, material);
@@ -508,6 +540,8 @@ private:
 		glm::mat4 proj = m_MainCamera->GetProjectionMatrix();
 		glm::mat4 view = m_MainCamera->GetViewMatrix();
 		glm::mat4 model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0, -111.0, 0));
+		model = glm::scale(model, glm::vec3(1.5, 1, 1.5));
 
 		m_MapShader->use();
 		m_MapShader->setMat4("projection", proj);
