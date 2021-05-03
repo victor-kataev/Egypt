@@ -36,6 +36,16 @@ public:
 		m_Meshes.emplace_back(verts, 0);
 	}
 
+	void CommitGeometry(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, const std::vector<Texture>& textures)
+	{
+		m_Meshes.emplace_back(vertices, indices, textures);
+	}
+
+	void CommitGeometry(const std::vector<float>& vertices, const std::vector<unsigned int>& indices, const std::vector<Texture>& textures)
+	{
+		m_Meshes.emplace_back(vertices, indices, textures);
+	}
+
 	void DrawElements(const Shader& shader) const
 	{
 		for (unsigned int i = 0; i < m_Meshes.size(); i++)

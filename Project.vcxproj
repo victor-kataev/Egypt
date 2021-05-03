@@ -156,11 +156,13 @@
     <ClInclude Include="params.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="shader.h" />
+    <ClInclude Include="utilities.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
     <None Include="fragment_light_source.glsl" />
     <None Include="fragment.glsl" />
+    <None Include="map_vertex.glsl" />
     <None Include="skybox_fragment.glsl" />
     <None Include="skybox_vertex.glsl" />
     <None Include="vertex.glsl" />

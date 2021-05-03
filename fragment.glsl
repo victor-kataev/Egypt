@@ -135,7 +135,7 @@ void main()
 	result += DirLightImpact(norm);
 	for(int i = 0; i < nPointLights; i++)
 		result += PointLightImpact(pointLight[i], norm);
-	result += SpotlightImpact(norm);
+	//result += SpotlightImpact(norm);
 
 
 //	vec3 emission = vec3(0.0);

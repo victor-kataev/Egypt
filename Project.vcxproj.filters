@@ -50,6 +50,9 @@
     <ClInclude Include="params.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="utilities.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="vertex.glsl" />
@@ -60,5 +63,6 @@
     <None Include=".gitignore" />
     <None Include="skybox_vertex.glsl" />
     <None Include="skybox_fragment.glsl" />
+    <None Include="map_vertex.glsl" />
   </ItemGroup>
 </Project>
