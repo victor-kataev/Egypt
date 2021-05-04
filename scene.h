@@ -51,6 +51,11 @@ static unsigned int loadCubemapTexture(std::vector<std::string> faces)
 }
 
 
+struct MeshGeometry
+{
+	//todo
+};
+
 
 class Map
 {
@@ -118,14 +123,6 @@ public:
 				v.normal = normal;
 
 				vertices.push_back(v);
-				/*vertices.push_back(v.position.x);
-				vertices.push_back(v.position.y);
-				vertices.push_back(v.position.z);
-				vertices.push_back(v.normal.x);
-				vertices.push_back(v.normal.y);
-				vertices.push_back(v.normal.z);
-				vertices.push_back(v.texCoords.s);
-				vertices.push_back(v.texCoords.t);*/
 			}
 		return vertices;
 	}
@@ -158,9 +155,21 @@ public:
 		m_MapModel.DrawElements(shader);
 	}
 
+	Vertex GetVertexAt(float x, float z)
+	{
+		glm::vec2 map_local = glm::vec2(x, z) + abs(m_Origin);
+
+		return m_MapModel.GetVertexOfMeshAt(0, map_local.y * m_MapDim.x + map_local.x);
+	}
+
 	Material& GetMaterial()
 	{
 		return m_Material;
+	}
+
+	glm::ivec2 GetDim() const
+	{
+		return m_MapDim;
 	}
 
 private:
@@ -204,6 +213,7 @@ private:
 	glm::vec2 m_Origin;
 	Model m_MapModel;
 	Material m_Material;
+	float m_SeaLevel;
 
 private:
 	float getHeightfieldAt(int index) const
@@ -270,6 +280,7 @@ public:
 		m_LightingShader->setFloat("pointLight[2].quadratic", 0.0002);
 
 
+
 		m_SkyboxShader = std::make_shared<Shader>("skybox_vertex.glsl", "skybox_fragment.glsl");
 		m_SkyboxShader->use();
 		m_SkyboxShader->setInt("skyboxDay", 0);
@@ -277,36 +288,7 @@ public:
 		createSkybox();
 
 
-		m_Models.emplace_back("resources/models/egypt/pyramid1.obj");
-		m_Models.emplace_back("resources/models/egypt/pyramid2.obj");
-		m_Models.emplace_back("resources/models/egypt/pyramid3.obj");
-		m_Models.emplace_back("resources/models/egypt/temple1.obj");
-		//m_Models.emplace_back("resources/models/egypt/temple2.obj");
-		//m_Models.emplace_back("resources/models/egypt/temple3.obj");
-		//m_Models.emplace_back();
-		//m_Models.emplace_back();
-		m_Models.emplace_back();
-		m_Models.emplace_back();
-		m_Models.emplace_back("resources/models/egypt/obelisk.obj");
-		m_Models.emplace_back("resources/models/egypt/houses1.obj");
-		m_Models.emplace_back("resources/models/egypt/houses2.obj");
-		m_Models.emplace_back("resources/models/egypt/houses3.obj");
-
-		Material material(glm::vec3(0.2), glm::vec3(0.5), glm::vec3(1.0), 32.0);
-
-		m_Entities.emplace_back(&m_Models[MPYRAMID1], material, "lighting", glm::vec3(0.0f, 0.0f, -310.0f), glm::vec3(8.0));
-		m_Entities.emplace_back(&m_Models[MPYRAMID2], material, "lighting", glm::vec3(300.0f, 0.0, -280.0), glm::vec3(8.0));
-		m_Entities.emplace_back(&m_Models[MPYRAMID3], material, "lighting", glm::vec3(-300.0f, 0.0, -180.0), glm::vec3(8.0));
-		m_Entities.emplace_back(&m_Models[MTEMPLE1], material, "lighting", glm::vec3(-90.0f, 0.0, -140.0), glm::vec3(1.0), 180.0f);
-		//m_Entities.emplace_back(&m_Models[MTEMPLE2], material, "lighting", glm::vec3(0.0f, 0.0, 0.0), glm::vec3(2.0));
-		//m_Entities.emplace_back(&m_Models[MTEMPLE3], material, "lighting", glm::vec3(100.0f, 0.0, 0.0), glm::vec3(2.0));
-		m_Entities.emplace_back(&m_Models[MOBELISK], material, "lighting", glm::vec3(-90.0f, 0.01, -180.0), glm::vec3(2.0));
-		m_Entities.emplace_back(&m_Models[MHOUSES1], material, "lighting", glm::vec3(-100.0f, 3.0, 100.0), glm::vec3(1.0));
-		m_Entities.emplace_back(&m_Models[MHOUSES2], material, "lighting", glm::vec3(0.0f, 3.0, 100.0), glm::vec3(1.0));
-		m_Entities.emplace_back(&m_Models[MHOUSES3], material, "lighting", glm::vec3(-156.0f, 0.0, -180.0), glm::vec3(2.0));
-		m_Entities.emplace_back(&m_Models[MHOUSES3], material, "lighting", glm::vec3(-156.0f, 0.0, -140.0), glm::vec3(2.0));
-		m_Entities.emplace_back(&m_Models[MHOUSES3], material, "lighting", glm::vec3(-150.0f, 0.0, -100.0), glm::vec3(2.0));
-		m_Entities.emplace_back(&m_Models[MHOUSES3], material, "lighting", glm::vec3(-50.0f, 0.0, -100.0), glm::vec3(2.0));
+		
 
 		m_MapShader = std::make_shared<Shader>("map_vertex.glsl", "fragment.glsl");
 		m_MapShader->use();
@@ -330,7 +312,45 @@ public:
 		m_MapShader->setFloat("pointLight[2].linear", 0.007);
 		m_MapShader->setFloat("pointLight[2].quadratic", 0.0002);
 
+		Material material(glm::vec3(0.2), glm::vec3(0.5), glm::vec3(1.0), 32.0);
 		createMap(material);
+		createRiver();
+
+
+
+		m_Models.emplace_back("resources/models/egypt/pyramid1.obj");
+		m_Models.emplace_back("resources/models/egypt/pyramid2.obj");
+		m_Models.emplace_back("resources/models/egypt/pyramid3.obj");
+		//m_Models.emplace_back("resources/models/egypt/temple1.obj");
+		//m_Models.emplace_back("resources/models/egypt/temple2.obj");
+		//m_Models.emplace_back("resources/models/egypt/temple3.obj");
+		//m_Models.emplace_back();
+		//m_Models.emplace_back();
+		//m_Models.emplace_back();
+		//m_Models.emplace_back();
+		//m_Models.emplace_back("resources/models/egypt/obelisk.obj");
+		//m_Models.emplace_back("resources/models/egypt/houses1.obj");
+		//m_Models.emplace_back("resources/models/egypt/houses2.obj");
+		//m_Models.emplace_back("resources/models/egypt/houses3.obj");
+
+
+		m_Entities.emplace_back(&m_Models[MPYRAMID1], material, "lighting", glm::vec3(0.0f, 0.0f, -310.0f), glm::vec3(8.0));
+		m_Entities.emplace_back(&m_Models[MPYRAMID2], material, "lighting", glm::vec3(300.0f, 0.0, -280.0), glm::vec3(8.0));
+		m_Entities.emplace_back(&m_Models[MPYRAMID3], material, "lighting", glm::vec3(-300.0f, 0.0, -180.0), glm::vec3(8.0));
+
+		
+
+		//m_Entities.emplace_back(&m_Models[MTEMPLE1], material, "lighting", glm::vec3(-90.0f, 0.0, -140.0), glm::vec3(1.0), 180.0f);
+		//m_Entities.emplace_back(&m_Models[MTEMPLE2], material, "lighting", glm::vec3(0.0f, 0.0, 0.0), glm::vec3(2.0));
+		//m_Entities.emplace_back(&m_Models[MTEMPLE3], material, "lighting", glm::vec3(100.0f, 0.0, 0.0), glm::vec3(2.0));
+		//m_Entities.emplace_back(&m_Models[MOBELISK], material, "lighting", glm::vec3(-90.0f, 0.01, -180.0), glm::vec3(2.0));
+		//m_Entities.emplace_back(&m_Models[MHOUSES1], material, "lighting", glm::vec3(-100.0f, 3.0, 100.0), glm::vec3(1.0));
+		//m_Entities.emplace_back(&m_Models[MHOUSES2], material, "lighting", glm::vec3(0.0f, 3.0, 100.0), glm::vec3(1.0));
+		//m_Entities.emplace_back(&m_Models[MHOUSES3], material, "lighting", glm::vec3(-156.0f, 0.0, -180.0), glm::vec3(2.0));
+		//m_Entities.emplace_back(&m_Models[MHOUSES3], material, "lighting", glm::vec3(-156.0f, 0.0, -140.0), glm::vec3(2.0));
+		//m_Entities.emplace_back(&m_Models[MHOUSES3], material, "lighting", glm::vec3(-150.0f, 0.0, -100.0), glm::vec3(2.0));
+		//m_Entities.emplace_back(&m_Models[MHOUSES3], material, "lighting", glm::vec3(-50.0f, 0.0, -100.0), glm::vec3(2.0));
+
 	}
 
 	void Render()
@@ -338,7 +358,7 @@ public:
 		float time = glfwGetTime();
 		time /= 2;
 		float radius = 20;
-		m_LightDir = glm::vec3(cos(time),sin(time), m_LightDir.z);
+		//m_LightDir = glm::vec3(cos(time),sin(time), m_LightDir.z);
 
 		drawSkybox(time);
 		drawMap();
@@ -352,12 +372,13 @@ public:
 		m_LightingShader->setVec3("SunColor", m_SunColor);
 		m_LightingShader->setVec3("SunPositon", m_SunPosition);
 
+		drawRiver();
 
 		for (auto& entity : m_Entities)
 		{
 			if (entity.GetShaderType() == "lighting")
 			{
-				
+				//handleCollision(entity);
 				glm::mat4 model = entity.GetModelMatrix();
 
 				
@@ -424,6 +445,7 @@ private:
 	std::vector<std::shared_ptr<Shader>> m_Shaders;
 	Model m_Skybox;
 	std::shared_ptr<Map> m_Map;
+	Model m_River;
 	
 	//tmp
 	unsigned int cubeMapTextureDay;
@@ -583,4 +605,98 @@ private:
 		m_Map->Draw(*m_MapShader);
 
 	}
+
+	void handleCollision(Entity & entity)
+	{
+		glm::vec3 epos = entity.GetPosition();
+		Vertex map_vert = m_Map->GetVertexAt(epos.x, epos.z);
+		glm::vec3 up(0.0, 1.0, 0.0);
+		glm::vec3 axis = glm::cross(up, map_vert.normal);
+		float dot = glm::dot(up, map_vert.normal);
+		float angle = std::acos(dot);
+
+		epos.y = map_vert.position.y;
+
+		entity.SetPosition(epos);
+		if(axis != glm::vec3(0.0))
+			entity.Rotate(angle, axis);
+	}
+
+	void createRiver()
+	{
+		int riverWidth = 50;
+		int riverLength = m_Map->GetDim().x;
+		std::cout << "map dim.x = " << riverLength << std::endl;
+		std::vector<Vertex> vertices;
+
+		for(int z = 0; z < riverWidth; z++)
+			for (int x = 0; x < riverLength; x++)
+			{
+				Vertex v;
+
+				//position
+				v.position.x = x;
+				v.position.y = 10;
+				v.position.z = z;
+
+				//texcoords
+				if (x % 2 == 0)
+					if (z % 2 == 0)
+						v.texCoords = glm::vec2(0.0, 0.0);
+					else
+						v.texCoords = glm::vec2(0.0, 1.0);
+				else
+					if (z % 2 == 0)
+						v.texCoords = glm::vec2(1.0, 0.0);
+					else
+						v.texCoords = glm::vec2(1.0, 1.0);
+
+				//normals
+				v.normal = glm::vec3(0.0, 1.0, 0.0);
+
+				vertices.push_back(v);
+			}
+
+		//indices
+		std::vector<unsigned int> indices;
+		for (int z = 0, j = riverWidth - 1; z < riverWidth && j >= 0; z++, j--)
+			for (int x = 0, i = riverLength - 1; x < riverLength && i >= 0; x++, i--)
+			{
+				if (x + 1 < riverLength && z + 1 < riverWidth)
+				{
+					indices.push_back(z * riverLength + x); //position in vertex buffer
+					indices.push_back(z * riverLength + (x + 1));
+					indices.push_back((z + 1) * riverLength + x);
+				}
+				if (j - 1 >= 0 && i - 1 >= 0)
+				{
+					indices.push_back(j * riverLength  + i);
+					indices.push_back(j * riverLength + (i - 1));
+					indices.push_back((j - 1) * riverLength + i);
+				}
+			}
+
+		//textures
+		Texture t;
+		t.id = loadTexture("resources/textures/water1.jpg");
+		t.type = "texture_diffuse";
+		std::vector<Texture> textures;
+		textures.push_back(t);
+
+		m_River.CommitGeometry(vertices, indices, textures);
+	}
+
+	void drawRiver()
+	{
+		int map_width = m_Map->GetDim().x;
+
+		glm::mat4 model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-map_width/2*1.5, -10.0, 0.0));
+		model = glm::scale(model, glm::vec3(1.5, 0.0, 8.0));
+		m_LightingShader->setMat4("model", model);
+
+		m_River.DrawElements(*m_LightingShader);
+	}
+
+
 };

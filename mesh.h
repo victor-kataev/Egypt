@@ -45,6 +45,10 @@ public:
 	void DrawElements(const Shader &shader) const;
 	void DrawElements() const;
 	void DrawArrays() const;
+	Vertex GetVertexAt(int idx) const
+	{
+		return m_Vertices[idx];
+	}
 
 private:
 	unsigned int VAO, VBO, EBO;

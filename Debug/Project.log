@@ -1,33 +1,48 @@
 ﻿  main.cpp
 C:\Users\victo\OneDrive\Desktop\openGL\Project\shader.h(45,40): warning C4101: 'e': unreferenced local variable
 C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(30,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(192,25): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
-          with
-          [
-              T=glm::i32
-          ]
-C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(256,1): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(257,1): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(261,1): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(262,1): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(265,1): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(266,1): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(269,1): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(270,1): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(295,1): warning C4305: 'argument': truncation from 'double' to 'T'
+C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(162,67): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
           with
           [
               T=float
           ]
-C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(317,1): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(318,1): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(322,1): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(323,1): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(326,1): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(327,1): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(330,1): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(331,1): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(338,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(201,25): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=glm::i32
+          ]
+C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(266,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(267,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(271,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(272,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(275,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(276,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(279,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(280,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(299,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(300,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(304,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(305,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(308,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(309,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(312,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(313,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(315,1): warning C4305: 'argument': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(358,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(638,20): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(640,20): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
 C:\Users\victo\OneDrive\Desktop\openGL\Project\main.cpp(157,28): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 C:\Users\victo\OneDrive\Desktop\openGL\Project\main.cpp(276,67): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 C:\Users\victo\OneDrive\Desktop\openGL\Project\main.cpp(284,68): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
@@ -66,5 +81,5 @@ C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.2
           [
               _Ty=glm::vec3
           ]
-C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(231): message : see reference to function template instantiation 'void std::vector<Camera,std::allocator<Camera>>::emplace_back<glm::vec3,double,double>(glm::vec3 &&,double &&,double &&)' being compiled
+C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(241): message : see reference to function template instantiation 'void std::vector<Camera,std::allocator<Camera>>::emplace_back<glm::vec3,double,double>(glm::vec3 &&,double &&,double &&)' being compiled
   Project.vcxproj -> C:\Users\victo\OneDrive\Desktop\openGL\Project\Debug\Project.exe

@@ -64,6 +64,11 @@ public:
 			m_Meshes[i].DrawArrays();
 	}
 
+	Vertex GetVertexOfMeshAt(int meshIdx, int vertIdx)
+	{
+		return m_Meshes[meshIdx].GetVertexAt(vertIdx);
+	}
+
 private:
 	std::vector<Mesh> m_Meshes;
 	std::string m_Directory;
