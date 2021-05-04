@@ -13,15 +13,11 @@ uniform mat4 view;
 uniform mat4 model;
 
 uniform float time;
-uniform bool river;
 
 void main()
 {
 	gl_Position = projection * view * model * vec4(aPos, 1.0);
 	Normal = aNormal;
 	FragPos = vec3(model * vec4(aPos, 1.0f));
-	TexCoords = aTexCoords;
-
-	if(river)
-		TexCoords += vec2(0.0, time / 2);
+	TexCoords = vec2(aTexCoords.x + time, aTexCoords.y);
 }

@@ -168,6 +168,7 @@
     <None Include="vertex.glsl" />
     <None Include="vertex1.glsl" />
     <None Include="vertex_light_source.glsl" />
+    <None Include="water_vertex.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

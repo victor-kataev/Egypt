@@ -12,7 +12,8 @@
 #define MPYRAMID1 0
 #define MPYRAMID2 1
 #define MPYRAMID3 2
-#define MTEMPLE1 3
+#define MSHIP 3
+//#define MTEMPLE1 3
 #define MTEMPLE2 4
 #define MTEMPLE3 5
 #define MOBELISK 6
@@ -71,11 +72,11 @@ public:
 		m_Material = material;
 	}
 
-	void UpdateHeightfield(unsigned char* img, int hfWidth, int hfHeight)
-	{
-		m_Heightfield.Clear();
-		m_Heightfield.Create(img, hfWidth, hfHeight);
-	}
+	//void UpdateHeightfield(unsigned char* img, int hfWidth, int hfHeight)
+	//{
+	//	m_Heightfield.Clear();
+	//	m_Heightfield.Create(img, hfWidth, hfHeight);
+	//}
 
 	std::vector<Vertex> ComposeVertices() const
 	{
@@ -191,10 +192,10 @@ private:
 				delete[] m_Data;
 		}
 
-		void Create(unsigned char* img, int width, int height)
-		{
-			Heightfield(img, width, height);
-		}
+		//void Create(unsigned char* img, int width, int height)
+		//{
+		//	Heightfield(img, width, height);
+		//}
 
 		void Clear()
 		{
@@ -240,6 +241,7 @@ public:
 		//Cameras
 		m_Cameras.emplace_back(glm::vec3(0.0, 0.0, 3.0), -90.0, 0.0);
 		m_Cameras.emplace_back(glm::vec3(-10.0, 0.0, 3.0), -90.0, 0.0);
+		m_Cameras.emplace_back(glm::vec3(10.0, 20.0, 3.0), -90.0, 0.0);
 		m_Cameras.emplace_back(glm::vec3(10.0, 20.0, 3.0), -90.0, 0.0);
 		m_MainCamera = &m_Cameras[0];
 
@@ -321,6 +323,7 @@ public:
 		m_Models.emplace_back("resources/models/egypt/pyramid1.obj");
 		m_Models.emplace_back("resources/models/egypt/pyramid2.obj");
 		m_Models.emplace_back("resources/models/egypt/pyramid3.obj");
+		m_Models.emplace_back("resources/models/egypt/ship.obj");
 		//m_Models.emplace_back("resources/models/egypt/temple1.obj");
 		//m_Models.emplace_back("resources/models/egypt/temple2.obj");
 		//m_Models.emplace_back("resources/models/egypt/temple3.obj");
@@ -337,6 +340,11 @@ public:
 		m_Entities.emplace_back(&m_Models[MPYRAMID1], material, "lighting", glm::vec3(0.0f, 0.0f, -310.0f), glm::vec3(8.0));
 		m_Entities.emplace_back(&m_Models[MPYRAMID2], material, "lighting", glm::vec3(300.0f, 0.0, -280.0), glm::vec3(8.0));
 		m_Entities.emplace_back(&m_Models[MPYRAMID3], material, "lighting", glm::vec3(-300.0f, 0.0, -180.0), glm::vec3(8.0));
+		m_Entities.emplace_back(&m_Models[MSHIP], material, "lighting", glm::vec3(0.0f, -3.5, 130.0), glm::vec3(0.2), glm::radians(90.0));
+		m_Entities[m_Entities.size() - 1].SetDirection(glm::vec3(1.0, 0.0, 0.0));
+		m_Entities[m_Entities.size() - 1].SetVelocity(0.5);
+		m_Entities[m_Entities.size() - 1].AttachCamera(&m_Cameras[1], glm::vec3(2.0, 5.0, -1.0));
+
 
 		
 
@@ -379,6 +387,9 @@ public:
 			if (entity.GetShaderType() == "lighting")
 			{
 				//handleCollision(entity);
+				if (entity.GetModel() == &m_Models[MSHIP])
+					moveAlongEllise(entity);
+				entity.Advance();
 				glm::mat4 model = entity.GetModelMatrix();
 
 				
@@ -624,8 +635,8 @@ private:
 
 	void createRiver()
 	{
-		int riverWidth = 50;
-		int riverLength = m_Map->GetDim().x;
+		int riverWidth = 125;
+		int riverLength = m_Map->GetDim().x / 2;
 		std::cout << "map dim.x = " << riverLength << std::endl;
 		std::vector<Vertex> vertices;
 
@@ -691,12 +702,32 @@ private:
 		int map_width = m_Map->GetDim().x;
 
 		glm::mat4 model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-map_width/2*1.5, -10.0, 0.0));
-		model = glm::scale(model, glm::vec3(1.5, 0.0, 8.0));
+		model = glm::translate(model, glm::vec3(-map_width/2*1.5, -2.0, 10.0));
+		model = glm::scale(model, glm::vec3(3.0, 0.0, 3.0));
 		m_LightingShader->setMat4("model", model);
+		m_LightingShader->setBool("river", true);
+		m_LightingShader->setFloat("time", glfwGetTime());
+
 
 		m_River.DrawElements(*m_LightingShader);
+		m_LightingShader->setBool("river", false);
 	}
 
+	void moveAlongEllise(Entity & entity)
+	{
+		float time = glfwGetTime();
+		float a = 500, b = 50, h = 0, k = 180;
+		glm::vec3 pos = entity.GetPosition();
+		float lastZ = pos.z;
+		pos = glm::vec3(h + a * cos(time/40), pos.y, k + b * sin(time/40));
+		entity.SetPosition(pos);
+		
+		/*float offsetZ = pos.z - lastZ;
+		float angle = entity.GetRotationAngle();
+		angle += abs(offsetZ);
+		front.x = cos(glm::radians(Yaw)) * cos(glm::radians(Pitch));
+		front.y = sin(glm::radians(Pitch));
+		front.z = sin(glm::radians(Yaw)) * cos(glm::radians(Pitch));*/
+	}
 
 };

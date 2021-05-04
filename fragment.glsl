@@ -91,43 +91,10 @@ vec3 DirLightImpact(vec3 normal);
 vec3 PointLightImpact(PointLight pointLight, vec3 normal);
 vec3 SpotlightImpact(vec3 normal);
 
+uniform bool river;
+
 void main()
 {
-/*
-	vec3 lightDir = normalize(light.position - FragPos);
-	float theta = dot(lightDir, normalize(-light.dir));
-	float epsilon = light.cutoff - light.outerCutoff;
-	float intensity = clamp((theta - light.outerCutoff) / epsilon, 0.0, 1.0);
-	vec3 result;
-
-	//ambient
-	vec3 ambient = light.ambient * vec3(texture(material.texture_diffuse1, TexCoords));
-
-	
-	//diffuse
-	vec3 norm = normalize(Normal);
-	//vec3 lightDir = normalize(-light.dir);
-	float diffuseImpact = max(dot(norm, lightDir), 0.0);
-	vec3 diffuse = light.diffuse * diffuseImpact * vec3(texture(material.texture_diffuse1, TexCoords));
-
-	//specular
-	vec3 viewDir = normalize(viewerPos - FragPos);
-	vec3 reflectDir = reflect(-lightDir, norm);
-	float specComponent = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
-	vec3 specular = light.specular * specComponent * vec3(texture(material.texture_specular1, TexCoords));
-
-	float d = length(light.position - FragPos);
-	float attenuation = 1.0 / (light.constant + light.linear * d + light.quadratic * (d*d));
-	
-	diffuse*= intensity;
-	specular *= intensity;
-
-	ambient *= attenuation;
-	diffuse *= attenuation;
-	specular *= attenuation;
-
-	result = ambient + diffuse + specular;
-	*/
 
 	vec3 result = vec3(0.0);
 	vec3 norm = normalize(Normal);
@@ -144,7 +111,6 @@ void main()
 //		emission = texture(material.emission, TexCoords + vec2(0.0, time)).rgb;
 //	}
 
-	
 
 	color = vec4(result, 1.0);
 }

@@ -7,12 +7,19 @@ class Entity
 {
 public:
 	Entity(Model* model, Material material, const std::string & shaderType, const glm::vec3& pos, const glm::vec3 & scale, float angle = 0.0, glm::vec3 axis = glm::vec3(0.0, 1.0, 0.0))
-		: m_Model(model), m_WorldPos(pos), m_Material(material), m_ShaderType(shaderType), m_Scale(scale)
+		: 
+		m_Model(model),
+		m_WorldPos(pos),
+		m_Material(material),
+		m_ShaderType(shaderType),
+		m_Scale(scale),
+		m_RotAngle(angle),
+		m_RotAxis(axis),
+		m_Direction(0.0, 1.0, 0.0),
+		m_Velocity(0.0),
+		m_Camera(NULL)
 	{
-		m_ModelMatrix = glm::mat4(1.0);
-		m_ModelMatrix = glm::translate(m_ModelMatrix, m_WorldPos);
-		m_ModelMatrix = glm::rotate(m_ModelMatrix, glm::radians(angle), axis);
-		m_ModelMatrix = glm::scale(m_ModelMatrix, m_Scale);
+		ApplyTransformations();
 	}
 
 	glm::vec3 GetPosition() const
@@ -48,9 +55,50 @@ public:
 		m_ModelMatrix = glm::scale(m_ModelMatrix, m_Scale);
 	}
 
+	void Advance()
+	{
+		m_WorldPos += m_Velocity * m_Direction;
+		//m_ModelMatrix = glm::translate(m_ModelMatrix, m_WorldPos);
+		ApplyTransformations();
+
+		if (m_Camera)
+			m_Camera->Position = m_WorldPos + m_CameraAncorPoint;
+	}
+
+	void AttachCamera(Camera* cam, glm::vec3 ancorPoint = glm::vec3(0.0))
+	{
+		m_Camera = cam;
+		m_CameraAncorPoint = ancorPoint;
+	}
+
 	void SetPosition(glm::vec3 pos)
 	{
 		m_WorldPos = pos;
+	}
+
+	void SetDirection(const glm::vec3 dir)
+	{
+		m_Direction = glm::normalize(dir);
+	}
+
+	void SetVelocity(float vel)
+	{
+		m_Velocity = vel;
+	}
+
+	glm::vec3 GetDirection() const
+	{
+		return m_Direction;
+	}
+
+	Model* GetModel() const
+	{
+		return m_Model;
+	}
+
+	float GetRotationAngle() const
+	{
+		return m_RotAngle;
 	}
 
 private:
@@ -59,5 +107,20 @@ private:
 	glm::vec3 m_WorldPos;
 	glm::vec3 m_Scale;
 	std::string m_ShaderType;
+	glm::vec3 m_Direction;
+	float m_Velocity;
+	float m_RotAngle;
+	glm::vec3 m_RotAxis;
 	glm::mat4 m_ModelMatrix;
+	Camera* m_Camera;
+	glm::vec3 m_CameraAncorPoint;
+
+private:
+	void ApplyTransformations()
+	{
+		m_ModelMatrix = glm::mat4(1.0);
+		m_ModelMatrix = glm::translate(m_ModelMatrix, m_WorldPos);
+		m_ModelMatrix = glm::rotate(m_ModelMatrix, m_RotAngle, m_RotAxis);
+		m_ModelMatrix = glm::scale(m_ModelMatrix, m_Scale);
+	}
 };

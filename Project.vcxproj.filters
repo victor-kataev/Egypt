@@ -64,5 +64,6 @@
     <None Include="skybox_vertex.glsl" />
     <None Include="skybox_fragment.glsl" />
     <None Include="map_vertex.glsl" />
+    <None Include="water_vertex.glsl" />
   </ItemGroup>
 </Project>
