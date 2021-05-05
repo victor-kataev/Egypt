@@ -95,6 +95,11 @@ public:
 		return m_RotAngle;
 	}
 
+	void BindMaterial(Shader& shader)
+	{
+		m_Material.Bind(shader);
+	}
+
 private:
 	Model* m_Model;
 	Material m_Material;

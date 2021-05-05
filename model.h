@@ -2,8 +2,7 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb/stb_image.h>
+
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
@@ -12,6 +11,11 @@
 #include <iostream>
 
 #include "mesh.h"
+
+#ifndef STB_IMAGE_IMPLEMENTATION
+	#define STB_IMAGE_IMPLEMENTATION
+	#include "stb/stb_image.h"
+#endif
 
 unsigned int TextureFromFile(const char* path, const std::string& directory, bool gamma = false);
 
