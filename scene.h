@@ -54,7 +54,7 @@ static unsigned int loadCubemapTexture(std::vector<std::string> faces)
 
 struct MeshGeometry
 {
-	//todo
+ 	//todo
 };
 
 
@@ -239,8 +239,8 @@ public:
 	Scene()
 	{
 		//Cameras
-		m_Cameras.emplace_back(glm::vec3(0.0, 0.0, 3.0), -90.0, 0.0);
-		m_Cameras.emplace_back(glm::vec3(-10.0, 0.0, 3.0), -90.0, 0.0);
+		m_Cameras.emplace_back(glm::vec3(0.0, 5.0, 3.0), -90.0, 0.0);
+		m_Cameras.emplace_back(glm::vec3(-10.0, 5.0, 3.0), -90.0, 0.0);
 		m_Cameras.emplace_back(glm::vec3(10.0, 20.0, 3.0), -90.0, 0.0);
 		m_Cameras.emplace_back(glm::vec3(10.0, 20.0, 3.0), -90.0, 0.0);
 		m_MainCamera = &m_Cameras[0];
@@ -248,6 +248,9 @@ public:
 		m_SunPosition = glm::vec3(10.0f);
 		m_SunColor = glm::vec3(1.0f);
 		m_LightDir = glm::vec3(-0.5f, -0.9, 0.8);
+
+		m_InitialTime = 230.0;
+		m_DeltaTime = 10.0;
 
 	}
 	 
@@ -261,6 +264,9 @@ public:
 
 		m_LightingShader = std::make_shared<Shader>("vertex.glsl", "fragment.glsl");
 		m_LightingShader->use();
+		m_LightingShader->setBool("night", m_Night);
+		
+
 		m_LightingShader->setInt("material.texture_diffuse1", 0);
 		m_LightingShader->setInt("material.texture_specular1", 1);
 		
@@ -280,6 +286,8 @@ public:
 		m_LightingShader->setFloat("pointLight[2].constant", 1.0);
 		m_LightingShader->setFloat("pointLight[2].linear", 0.007);
 		m_LightingShader->setFloat("pointLight[2].quadratic", 0.0002);
+		
+		m_LightingShader->setBool("flashlight", true);
 
 
 
@@ -313,6 +321,9 @@ public:
 		m_MapShader->setFloat("pointLight[2].constant", 1.0);
 		m_MapShader->setFloat("pointLight[2].linear", 0.007);
 		m_MapShader->setFloat("pointLight[2].quadratic", 0.0002);
+
+		m_MapShader->setBool("flashlight", true);
+
 
 		Material material(glm::vec3(0.2), glm::vec3(0.5), glm::vec3(1.0), 32.0);
 		createMap(material);
@@ -363,12 +374,12 @@ public:
 
 	void Render()
 	{
-		float time = glfwGetTime();
-		time /= 2;
+		m_Time = glfwGetTime();
 		float radius = 20;
 		//m_LightDir = glm::vec3(cos(time),sin(time), m_LightDir.z);
 
-		drawSkybox(time);
+		processDayLight();
+		drawSkybox(m_Time);
 		drawMap();
 
 		glm::mat4 proj = m_MainCamera->GetProjectionMatrix();
@@ -379,6 +390,7 @@ public:
 		m_LightingShader->setMat4("view", view);
 		m_LightingShader->setVec3("SunColor", m_SunColor);
 		m_LightingShader->setVec3("SunPositon", m_SunPosition);
+		m_LightingShader->setBool("night", m_Night);
 
 		drawRiver();
 
@@ -403,26 +415,26 @@ public:
 
 				m_LightingShader->setVec3("spotlight.position", m_MainCamera->Position);
 				m_LightingShader->setVec3("spotlight.dir", m_MainCamera->Front);
-				m_LightingShader->setVec3("spotlight.ambient", entity.GetMaterial().AmbientColor * m_SunColor);
-				m_LightingShader->setVec3("spotlight.diffuse", entity.GetMaterial().DiffuseColor * m_SunColor);
-				m_LightingShader->setVec3("spotlight.specular", entity.GetMaterial().SpecularColor * m_SunColor);
+				m_LightingShader->setVec3("spotlight.ambient", entity.GetMaterial().AmbientColor * glm::vec3(1.0));
+				m_LightingShader->setVec3("spotlight.diffuse", entity.GetMaterial().DiffuseColor * glm::vec3(1.0));
+				m_LightingShader->setVec3("spotlight.specular", entity.GetMaterial().SpecularColor * glm::vec3(1.0));
 				m_LightingShader->setFloat("spotlight.cutOff", glm::cos(glm::radians(12.5f)));
 				m_LightingShader->setFloat("spotlight.outerCutOff", glm::cos(glm::radians(17.5f)));
 
 				m_LightingShader->setVec3("pointLight[0].position", pointLightPositions[0]);
-				m_LightingShader->setVec3("pointLight[0].ambient", entity.GetMaterial().AmbientColor * m_SunColor);
-				m_LightingShader->setVec3("pointLight[0].diffuse", entity.GetMaterial().DiffuseColor * m_SunColor);
-				m_LightingShader->setVec3("pointLight[0].specular", entity.GetMaterial().SpecularColor * m_SunColor);
+				m_LightingShader->setVec3("pointLight[0].ambient", entity.GetMaterial().AmbientColor * glm::vec3(1.0));
+				m_LightingShader->setVec3("pointLight[0].diffuse", entity.GetMaterial().DiffuseColor * glm::vec3(1.0));
+				m_LightingShader->setVec3("pointLight[0].specular", entity.GetMaterial().SpecularColor * glm::vec3(1.0));
 				
 				m_LightingShader->setVec3("pointLight[1].position", pointLightPositions[1]);
-				m_LightingShader->setVec3("pointLight[1].ambient", entity.GetMaterial().AmbientColor * m_SunColor);
-				m_LightingShader->setVec3("pointLight[1].diffuse", entity.GetMaterial().DiffuseColor * m_SunColor);
-				m_LightingShader->setVec3("pointLight[1].specular", entity.GetMaterial().SpecularColor * m_SunColor);
+				m_LightingShader->setVec3("pointLight[1].ambient", entity.GetMaterial().AmbientColor * glm::vec3(1.0));
+				m_LightingShader->setVec3("pointLight[1].diffuse", entity.GetMaterial().DiffuseColor * glm::vec3(1.0));
+				m_LightingShader->setVec3("pointLight[1].specular", entity.GetMaterial().SpecularColor * glm::vec3(1.0));
 
 				m_LightingShader->setVec3("pointLight[2].position", pointLightPositions[2]);
-				m_LightingShader->setVec3("pointLight[2].ambient", entity.GetMaterial().AmbientColor * m_SunColor);
-				m_LightingShader->setVec3("pointLight[2].diffuse", entity.GetMaterial().DiffuseColor * m_SunColor);
-				m_LightingShader->setVec3("pointLight[2].specular", entity.GetMaterial().SpecularColor * m_SunColor);
+				m_LightingShader->setVec3("pointLight[2].ambient", entity.GetMaterial().AmbientColor * glm::vec3(1.0));
+				m_LightingShader->setVec3("pointLight[2].diffuse", entity.GetMaterial().DiffuseColor * glm::vec3(1.0));
+				m_LightingShader->setVec3("pointLight[2].specular", entity.GetMaterial().SpecularColor * glm::vec3(1.0));
 
 				//m_LightingShader->setVec3("light.position", m_MainCamera->Position);
 				//m_LightingShader->setVec3("light.dir", m_MainCamera->Front);
@@ -457,7 +469,11 @@ private:
 	Model m_Skybox;
 	std::shared_ptr<Map> m_Map;
 	Model m_River;
-	
+	bool m_Night;
+	float m_Time;
+	float m_InitialTime;
+	float m_DeltaTime;
+
 	//tmp
 	unsigned int cubeMapTextureDay;
 	unsigned int cubeMapTextureNight;
@@ -511,25 +527,24 @@ private:
 		};
 
 
-		std::vector<std::string> facesDay
-		{
-			"skybox/skybox1/skybox_right.jpg",
-			"skybox/skybox1/skybox_left.jpg",
-			"skybox/skybox1/skybox_top.jpg",
-			"skybox/skybox1/skybox_bottom.jpg",
-			"skybox/skybox1/skybox_front.jpg",
-			"skybox/skybox1/skybox_back1.jpg",
-		};
-
 		std::vector<std::string> facesNight
 		{
-			"skybox/skybox/right.jpg",
-			"skybox/skybox/left.jpg",
-			"skybox/skybox/top.jpg",
-			"skybox/skybox/bottom.jpg",
-			"skybox/skybox/front.jpg",
-			//"skybox/skybox1/skybox_back1.jpg",
-			"skybox/skybox/back.jpg",
+			"resources/textures/skybox/right_night.jpg",
+			"resources/textures/skybox/left_night.jpg",
+			"resources/textures/skybox/top_night.jpg",
+			"resources/textures/skybox/bottom_night.jpg",
+			"resources/textures/skybox/front_night.jpg",
+			"resources/textures/skybox/back_night.jpg",
+		};
+
+		std::vector<std::string> facesDay
+		{
+			"resources/textures/skybox/right.jpg",
+			"resources/textures/skybox/left.jpg",
+			"resources/textures/skybox/top.jpg",
+			"resources/textures/skybox/bottom.jpg",
+			"resources/textures/skybox/front.jpg",
+			"resources/textures/skybox/back.jpg",
 		};
 
 		m_Skybox.CommitGeometry(skyboxVerts);
@@ -546,8 +561,6 @@ private:
 		glm::mat4 view = glm::mat4(glm::mat3(m_MainCamera->GetViewMatrix()));
 		m_SkyboxShader->setMat4("projection", proj);
 		m_SkyboxShader->setMat4("view", view);
-		//m_SkyboxShader->setFloat("time", abs(sin(time / 2)));
-		m_SkyboxShader->setFloat("time", 0.0);
 
 
 		glActiveTexture(GL_TEXTURE0);
@@ -564,7 +577,6 @@ private:
 		int width, height, nrComponents;
 		unsigned char* data = stbi_load("resources/maps/map_big.png", &width, &height, &nrComponents, 1);
 
-		std::cout << "channels map: " << nrComponents << std::endl;
 		m_Map = std::make_shared<Map>(data, width, height, width, height, material);
 	}
 
@@ -577,13 +589,14 @@ private:
 		model = glm::scale(model, glm::vec3(1.5, 1, 1.5));
 
 		m_MapShader->use();
+		m_MapShader->setBool("night", m_Night);
 		m_MapShader->setMat4("projection", proj);
 		m_MapShader->setMat4("view", view);
 		m_MapShader->setMat4("model", model);
 		m_MapShader->setVec3("SunColor", m_SunColor);
 		m_MapShader->setVec3("SunPositon", m_SunPosition);
 		m_MapShader->setVec3("viewerPos", m_MainCamera->Position);
-		m_LightingShader->setFloat("material.shininess", m_Map->GetMaterial().Shininess);
+		m_MapShader->setFloat("material.shininess", m_Map->GetMaterial().Shininess);
 
 		m_MapShader->setVec3("dirLight.dir", m_LightDir);
 		m_MapShader->setVec3("dirLight.ambient", m_Map->GetMaterial().AmbientColor * m_SunColor);
@@ -592,26 +605,26 @@ private:
 
 		m_MapShader->setVec3("spotlight.position", m_MainCamera->Position);
 		m_MapShader->setVec3("spotlight.dir", m_MainCamera->Front);
-		m_MapShader->setVec3("spotlight.ambient", m_Map->GetMaterial().AmbientColor * m_SunColor);
-		m_MapShader->setVec3("spotlight.diffuse", m_Map->GetMaterial().DiffuseColor * m_SunColor);
-		m_MapShader->setVec3("spotlight.specular", m_Map->GetMaterial().SpecularColor * m_SunColor);
+		m_MapShader->setVec3("spotlight.ambient", m_Map->GetMaterial().AmbientColor * glm::vec3(1.0));
+		m_MapShader->setVec3("spotlight.diffuse", m_Map->GetMaterial().DiffuseColor * glm::vec3(1.0));
+		m_MapShader->setVec3("spotlight.specular", m_Map->GetMaterial().SpecularColor * glm::vec3(1.0));
 		m_MapShader->setFloat("spotlight.cutOff", glm::cos(glm::radians(12.5f)));
 		m_MapShader->setFloat("spotlight.outerCutOff", glm::cos(glm::radians(17.5f)));
 
 		m_MapShader->setVec3("pointLight[0].position", pointLightPositions[0]);
-		m_MapShader->setVec3("pointLight[0].ambient", m_Map->GetMaterial().AmbientColor * m_SunColor);
-		m_MapShader->setVec3("pointLight[0].diffuse", m_Map->GetMaterial().DiffuseColor * m_SunColor);
-		m_MapShader->setVec3("pointLight[0].specular", m_Map->GetMaterial().SpecularColor * m_SunColor);
+		m_MapShader->setVec3("pointLight[0].ambient", m_Map->GetMaterial().AmbientColor * glm::vec3(1.0));
+		m_MapShader->setVec3("pointLight[0].diffuse", m_Map->GetMaterial().DiffuseColor * glm::vec3(1.0));
+		m_MapShader->setVec3("pointLight[0].specular", m_Map->GetMaterial().SpecularColor * glm::vec3(1.0));
 
 		m_MapShader->setVec3("pointLight[1].position", pointLightPositions[1]);
-		m_MapShader->setVec3("pointLight[1].ambient", m_Map->GetMaterial().AmbientColor * m_SunColor);
-		m_MapShader->setVec3("pointLight[1].diffuse", m_Map->GetMaterial().DiffuseColor * m_SunColor);
-		m_MapShader->setVec3("pointLight[1].specular", m_Map->GetMaterial().SpecularColor * m_SunColor);
+		m_MapShader->setVec3("pointLight[1].ambient", m_Map->GetMaterial().AmbientColor * glm::vec3(1.0));
+		m_MapShader->setVec3("pointLight[1].diffuse", m_Map->GetMaterial().DiffuseColor * glm::vec3(1.0));
+		m_MapShader->setVec3("pointLight[1].specular", m_Map->GetMaterial().SpecularColor * glm::vec3(1.0));
 
 		m_MapShader->setVec3("pointLight[2].position", pointLightPositions[2]);
-		m_MapShader->setVec3("pointLight[2].ambient", m_Map->GetMaterial().AmbientColor * m_SunColor);
-		m_MapShader->setVec3("pointLight[2].diffuse", m_Map->GetMaterial().DiffuseColor * m_SunColor);
-		m_MapShader->setVec3("pointLight[2].specular", m_Map->GetMaterial().SpecularColor * m_SunColor);
+		m_MapShader->setVec3("pointLight[2].ambient", m_Map->GetMaterial().AmbientColor * glm::vec3(1.0));
+		m_MapShader->setVec3("pointLight[2].diffuse", m_Map->GetMaterial().DiffuseColor * glm::vec3(1.0));
+		m_MapShader->setVec3("pointLight[2].specular", m_Map->GetMaterial().SpecularColor * glm::vec3(1.0));
 
 		m_Map->Draw(*m_MapShader);
 
@@ -637,7 +650,7 @@ private:
 	{
 		int riverWidth = 125;
 		int riverLength = m_Map->GetDim().x / 2;
-		std::cout << "map dim.x = " << riverLength << std::endl;
+
 		std::vector<Vertex> vertices;
 
 		for(int z = 0; z < riverWidth; z++)
@@ -728,6 +741,47 @@ private:
 		front.x = cos(glm::radians(Yaw)) * cos(glm::radians(Pitch));
 		front.y = sin(glm::radians(Pitch));
 		front.z = sin(glm::radians(Yaw)) * cos(glm::radians(Pitch));*/
+	}
+
+	void processDayLight()
+	{
+
+		float sinValue = glm::sin(glm::radians(m_InitialTime + m_Time * 10));
+		float cosValue = glm::cos(glm::radians(m_InitialTime + m_Time * 10));
+
+		std::cout << "Time = " << m_Time << std::endl;
+		std::cout << "sinValue = " << sinValue << std::endl;
+		if (sinValue <= 0.5)
+		{
+			m_Night = true;
+		}
+		else
+		{
+			m_Night = false;
+		}
+
+		if (sinValue <= 0.1)
+		{
+			m_SunColor = glm::vec3(0.1);
+		}
+		else
+		{
+			m_SunColor = glm::vec3(sinValue);
+		}
+
+		
+
+		std::cout << "Night = " << m_Night << std::endl;
+		std::cout << "---------" << std::endl;
+
+		m_SkyboxShader->use();
+		if (sinValue < 0)
+			m_SkyboxShader->setFloat("time", 0.0);
+		else
+			m_SkyboxShader->setFloat("time", abs(sinValue));
+
+
+		m_LightDir = glm::vec3(cosValue, -sinValue, -0.1);
 	}
 
 };

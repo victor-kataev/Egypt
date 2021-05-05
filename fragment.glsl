@@ -91,7 +91,8 @@ vec3 DirLightImpact(vec3 normal);
 vec3 PointLightImpact(PointLight pointLight, vec3 normal);
 vec3 SpotlightImpact(vec3 normal);
 
-uniform bool river;
+uniform bool night;
+uniform bool flashlight;
 
 void main()
 {
@@ -100,9 +101,13 @@ void main()
 	vec3 norm = normalize(Normal);
 	
 	result += DirLightImpact(norm);
-	for(int i = 0; i < nPointLights; i++)
-		result += PointLightImpact(pointLight[i], norm);
-	//result += SpotlightImpact(norm);
+
+	if(night)
+		for(int i = 0; i < nPointLights; i++)
+			result += PointLightImpact(pointLight[i], norm);
+
+	if(flashlight)
+		result += SpotlightImpact(norm);
 
 
 //	vec3 emission = vec3(0.0);
