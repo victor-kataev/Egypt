@@ -45,9 +45,14 @@ public:
 	void DrawElements(const Shader &shader) const;
 	void DrawElements() const;
 	void DrawArrays() const;
+	void DrawArrays(const Shader& shader) const;
 	Vertex GetVertexAt(int idx) const
 	{
 		return m_Vertices[idx];
+	}
+	void SetTextures(const std::vector<Texture>& textures)
+	{
+		m_Textures = textures;
 	}
 
 private:

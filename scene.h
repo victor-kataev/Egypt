@@ -14,12 +14,13 @@
 #define MPYRAMID3 2
 #define MSHIP 3
 //#define MTEMPLE1 3
-#define MTEMPLE2 4
+#define MTEMPLE2 40
 #define MTEMPLE3 5
 #define MOBELISK 6
 #define MHOUSES1 7
 #define MHOUSES2 8
 #define MHOUSES3 9
+#define MWOODENBOX 4
 
 static unsigned int loadCubemapTexture(std::vector<std::string> faces)
 {
@@ -52,10 +53,6 @@ static unsigned int loadCubemapTexture(std::vector<std::string> faces)
 }
 
 
-struct MeshGeometry
-{
- 	//todo
-};
 
 
 class Map
@@ -233,6 +230,7 @@ private:
 	}
 };
 
+
 class Scene
 {
 public:
@@ -346,15 +344,29 @@ public:
 		//m_Models.emplace_back("resources/models/egypt/houses1.obj");
 		//m_Models.emplace_back("resources/models/egypt/houses2.obj");
 		//m_Models.emplace_back("resources/models/egypt/houses3.obj");
+		
+		Model woodenBox;
+		Texture tex_diffuse;
+		tex_diffuse.id = loadTexture("resources/textures/woodenbox_diffuse.png");
+		tex_diffuse.type = "texture_diffuse";
+		Texture tex_specular;
+		tex_specular.id = loadTexture("resources/textures/woodenbox_specular.png");
+		tex_specular.type = "texture_specular";
+		std::vector<Texture> textures;
+		textures.push_back(tex_diffuse);
+		textures.push_back(tex_specular);
+		woodenBox.CommitGeometry(woodenBoxVerts, woodenboxIndices, textures);
+		m_Models.push_back(woodenBox);
 
 
-		m_Entities.emplace_back(&m_Models[MPYRAMID1], material, "lighting", glm::vec3(0.0f, 0.0f, -310.0f), glm::vec3(8.0));
-		m_Entities.emplace_back(&m_Models[MPYRAMID2], material, "lighting", glm::vec3(300.0f, 0.0, -280.0), glm::vec3(8.0));
-		m_Entities.emplace_back(&m_Models[MPYRAMID3], material, "lighting", glm::vec3(-300.0f, 0.0, -180.0), glm::vec3(8.0));
-		m_Entities.emplace_back(&m_Models[MSHIP], material, "lighting", glm::vec3(0.0f, -3.5, 130.0), glm::vec3(0.2), glm::radians(90.0));
+		m_Entities.emplace_back(&m_Models[MPYRAMID1], material, glm::vec3(0.0f, 0.0f, -310.0f), glm::vec3(8.0));
+		m_Entities.emplace_back(&m_Models[MPYRAMID2], material, glm::vec3(300.0f, 0.0, -280.0), glm::vec3(8.0));
+		m_Entities.emplace_back(&m_Models[MPYRAMID3], material, glm::vec3(-300.0f, 0.0, -180.0), glm::vec3(8.0));
+		m_Entities.emplace_back(&m_Models[MSHIP],  material, glm::vec3(0.0f, -3.5, 130.0), glm::vec3(0.2), glm::radians(90.0));
 		m_Entities[m_Entities.size() - 1].SetDirection(glm::vec3(1.0, 0.0, 0.0));
 		m_Entities[m_Entities.size() - 1].SetVelocity(0.5);
 		m_Entities[m_Entities.size() - 1].AttachCamera(&m_Cameras[1], glm::vec3(2.0, 5.0, -1.0));
+		m_Entities.emplace_back(&m_Models[MWOODENBOX], material, glm::vec3(0.0f, 10.5, 0.0), glm::vec3(1.0));
 
 
 		
@@ -369,6 +381,8 @@ public:
 		//m_Entities.emplace_back(&m_Models[MHOUSES3], material, "lighting", glm::vec3(-156.0f, 0.0, -140.0), glm::vec3(2.0));
 		//m_Entities.emplace_back(&m_Models[MHOUSES3], material, "lighting", glm::vec3(-150.0f, 0.0, -100.0), glm::vec3(2.0));
 		//m_Entities.emplace_back(&m_Models[MHOUSES3], material, "lighting", glm::vec3(-50.0f, 0.0, -100.0), glm::vec3(2.0));
+
+	
 
 	}
 
@@ -396,50 +410,46 @@ public:
 
 		for (auto& entity : m_Entities)
 		{
-			if (entity.GetShaderType() == "lighting")
-			{
-				//handleCollision(entity);
-				if (entity.GetModel() == &m_Models[MSHIP])
-					moveAlongEllise(entity);
-				entity.Advance();
-				glm::mat4 model = entity.GetModelMatrix();
+			
+			//handleCollision(entity);
+			if (entity.GetModel() == &m_Models[MSHIP])
+				moveAlongEllise(entity);
+			entity.Advance();
+			glm::mat4 model = entity.GetModelMatrix();
 
-				
-				m_LightingShader->setMat4("model", model);
-				m_LightingShader->setVec3("viewerPos", m_MainCamera->Position);
-				m_LightingShader->setFloat("material.shininess", entity.GetMaterial().Shininess);
-				m_LightingShader->setVec3("dirLight.dir", m_LightDir);
-				m_LightingShader->setVec3("dirLight.ambient", entity.GetMaterial().AmbientColor);
-				m_LightingShader->setVec3("dirLight.diffuse", entity.GetMaterial().DiffuseColor * m_SunColor);
-				m_LightingShader->setVec3("dirLight.specular", entity.GetMaterial().SpecularColor * m_SunColor);
+			
+			m_LightingShader->setMat4("model", model);
+			m_LightingShader->setVec3("viewerPos", m_MainCamera->Position);
+			m_LightingShader->setFloat("material.shininess", entity.GetMaterial().Shininess);
+			m_LightingShader->setVec3("dirLight.dir", m_LightDir);
+			m_LightingShader->setVec3("dirLight.ambient", entity.GetMaterial().AmbientColor);
+			m_LightingShader->setVec3("dirLight.diffuse", entity.GetMaterial().DiffuseColor * m_SunColor);
+			m_LightingShader->setVec3("dirLight.specular", entity.GetMaterial().SpecularColor * m_SunColor);
 
-				m_LightingShader->setVec3("spotlight.position", m_MainCamera->Position);
-				m_LightingShader->setVec3("spotlight.dir", m_MainCamera->Front);
-				m_LightingShader->setVec3("spotlight.ambient", entity.GetMaterial().AmbientColor * glm::vec3(1.0));
-				m_LightingShader->setVec3("spotlight.diffuse", entity.GetMaterial().DiffuseColor * glm::vec3(1.0));
-				m_LightingShader->setVec3("spotlight.specular", entity.GetMaterial().SpecularColor * glm::vec3(1.0));
-				m_LightingShader->setFloat("spotlight.cutOff", glm::cos(glm::radians(12.5f)));
-				m_LightingShader->setFloat("spotlight.outerCutOff", glm::cos(glm::radians(17.5f)));
+			m_LightingShader->setVec3("spotlight.position", m_MainCamera->Position);
+			m_LightingShader->setVec3("spotlight.dir", m_MainCamera->Front);
+			m_LightingShader->setVec3("spotlight.ambient", entity.GetMaterial().AmbientColor * glm::vec3(1.0));
+			m_LightingShader->setVec3("spotlight.diffuse", entity.GetMaterial().DiffuseColor * glm::vec3(1.0));
+			m_LightingShader->setVec3("spotlight.specular", entity.GetMaterial().SpecularColor * glm::vec3(1.0));
+			m_LightingShader->setFloat("spotlight.cutOff", glm::cos(glm::radians(12.5f)));
+			m_LightingShader->setFloat("spotlight.outerCutOff", glm::cos(glm::radians(17.5f)));
 
-				m_LightingShader->setVec3("pointLight[0].position", pointLightPositions[0]);
-				m_LightingShader->setVec3("pointLight[0].ambient", entity.GetMaterial().AmbientColor * glm::vec3(1.0));
-				m_LightingShader->setVec3("pointLight[0].diffuse", entity.GetMaterial().DiffuseColor * glm::vec3(1.0));
-				m_LightingShader->setVec3("pointLight[0].specular", entity.GetMaterial().SpecularColor * glm::vec3(1.0));
-				
-				m_LightingShader->setVec3("pointLight[1].position", pointLightPositions[1]);
-				m_LightingShader->setVec3("pointLight[1].ambient", entity.GetMaterial().AmbientColor * glm::vec3(1.0));
-				m_LightingShader->setVec3("pointLight[1].diffuse", entity.GetMaterial().DiffuseColor * glm::vec3(1.0));
-				m_LightingShader->setVec3("pointLight[1].specular", entity.GetMaterial().SpecularColor * glm::vec3(1.0));
+			m_LightingShader->setVec3("pointLight[0].position", pointLightPositions[0]);
+			m_LightingShader->setVec3("pointLight[0].ambient", entity.GetMaterial().AmbientColor * glm::vec3(1.0));
+			m_LightingShader->setVec3("pointLight[0].diffuse", entity.GetMaterial().DiffuseColor * glm::vec3(1.0));
+			m_LightingShader->setVec3("pointLight[0].specular", entity.GetMaterial().SpecularColor * glm::vec3(1.0));
+			
+			m_LightingShader->setVec3("pointLight[1].position", pointLightPositions[1]);
+			m_LightingShader->setVec3("pointLight[1].ambient", entity.GetMaterial().AmbientColor * glm::vec3(1.0));
+			m_LightingShader->setVec3("pointLight[1].diffuse", entity.GetMaterial().DiffuseColor * glm::vec3(1.0));
+			m_LightingShader->setVec3("pointLight[1].specular", entity.GetMaterial().SpecularColor * glm::vec3(1.0));
 
-				m_LightingShader->setVec3("pointLight[2].position", pointLightPositions[2]);
-				m_LightingShader->setVec3("pointLight[2].ambient", entity.GetMaterial().AmbientColor * glm::vec3(1.0));
-				m_LightingShader->setVec3("pointLight[2].diffuse", entity.GetMaterial().DiffuseColor * glm::vec3(1.0));
-				m_LightingShader->setVec3("pointLight[2].specular", entity.GetMaterial().SpecularColor * glm::vec3(1.0));
+			m_LightingShader->setVec3("pointLight[2].position", pointLightPositions[2]);
+			m_LightingShader->setVec3("pointLight[2].ambient", entity.GetMaterial().AmbientColor * glm::vec3(1.0));
+			m_LightingShader->setVec3("pointLight[2].diffuse", entity.GetMaterial().DiffuseColor * glm::vec3(1.0));
+			m_LightingShader->setVec3("pointLight[2].specular", entity.GetMaterial().SpecularColor * glm::vec3(1.0));
 
-				//m_LightingShader->setVec3("light.position", m_MainCamera->Position);
-				//m_LightingShader->setVec3("light.dir", m_MainCamera->Front);
-				entity.Draw(*m_LightingShader);
-			}
+			entity.Draw(*m_LightingShader);
 		}
 
 	}
@@ -749,8 +759,11 @@ private:
 		float sinValue = glm::sin(glm::radians(m_InitialTime + m_Time * 10));
 		float cosValue = glm::cos(glm::radians(m_InitialTime + m_Time * 10));
 
+#if 0
 		std::cout << "Time = " << m_Time << std::endl;
 		std::cout << "sinValue = " << sinValue << std::endl;
+#endif
+
 		if (sinValue <= 0.5)
 		{
 			m_Night = true;
@@ -770,9 +783,10 @@ private:
 		}
 
 		
-
+#if 0
 		std::cout << "Night = " << m_Night << std::endl;
 		std::cout << "---------" << std::endl;
+#endif
 
 		m_SkyboxShader->use();
 		if (sinValue < 0)

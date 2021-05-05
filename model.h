@@ -24,16 +24,12 @@ public:
 	Model(const char* path)
 	{
 		loadModel(path);
+		IndicesFlag = true;
 	}
 
-	void LoadFromFile(const char* path)
+	void CommitGeometry(const std::vector<float> & verts, VertexBitfield mask = 0x0)
 	{
-		loadModel(path);
-	}
-
-	void CommitGeometry(const std::vector<float> & verts)
-	{
-		m_Meshes.emplace_back(verts, 0);
+		m_Meshes.emplace_back(verts, mask);
 	}
 
 	void CommitGeometry(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, const std::vector<Texture>& textures)
@@ -44,6 +40,11 @@ public:
 	void CommitGeometry(const std::vector<float>& vertices, const std::vector<unsigned int>& indices, const std::vector<Texture>& textures)
 	{
 		m_Meshes.emplace_back(vertices, indices, textures);
+	}
+
+	void AssignTexturesToMesh(int idx, const std::vector<Texture>& textures)
+	{
+		m_Meshes[idx].SetTextures(textures);
 	}
 
 	void DrawElements(const Shader& shader) const
@@ -64,10 +65,18 @@ public:
 			m_Meshes[i].DrawArrays();
 	}
 
+	void DrawArrays(const Shader& shader) const
+	{
+		for (unsigned int i = 0; i < m_Meshes.size(); i++)
+			m_Meshes[i].DrawArrays(shader);
+	}
+
 	Vertex GetVertexOfMeshAt(int meshIdx, int vertIdx)
 	{
 		return m_Meshes[meshIdx].GetVertexAt(vertIdx);
 	}
+
+	bool IndicesFlag;
 
 private:
 	std::vector<Mesh> m_Meshes;

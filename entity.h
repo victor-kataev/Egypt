@@ -6,12 +6,11 @@
 class Entity
 {
 public:
-	Entity(Model* model, Material material, const std::string & shaderType, const glm::vec3& pos, const glm::vec3 & scale, float angle = 0.0, glm::vec3 axis = glm::vec3(0.0, 1.0, 0.0))
+	Entity(Model* model, Material material, const glm::vec3& pos, const glm::vec3 & scale, float angle = 0.0, glm::vec3 axis = glm::vec3(0.0, 1.0, 0.0))
 		: 
 		m_Model(model),
-		m_WorldPos(pos),
 		m_Material(material),
-		m_ShaderType(shaderType),
+		m_WorldPos(pos),
 		m_Scale(scale),
 		m_RotAngle(angle),
 		m_RotAxis(axis),
@@ -34,17 +33,12 @@ public:
 
 	void Draw(const Shader& shader) const
 	{
-		m_Model->DrawElements(shader);
+			m_Model->DrawElements(shader);
 	}
 
 	Material& GetMaterial()
 	{
 		return m_Material;
-	}
-	
-	const std::string& GetShaderType() const
-	{
-		return m_ShaderType;
 	}
 
 	void Rotate(float angle, glm::vec3 axis)
@@ -106,7 +100,6 @@ private:
 	Material m_Material;
 	glm::vec3 m_WorldPos;
 	glm::vec3 m_Scale;
-	std::string m_ShaderType;
 	glm::vec3 m_Direction;
 	float m_Velocity;
 	float m_RotAngle;
