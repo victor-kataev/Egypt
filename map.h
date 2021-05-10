@@ -28,7 +28,7 @@ static unsigned int loadTexture(const char* texPath)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		stbi_image_free(data);
 	}
@@ -204,7 +204,7 @@ private:
 	std::vector<Texture> uploadTextures()
 	{
 		Texture t;
-		t.id = loadTexture("sand.jpg");
+		t.id = loadTexture("resources/textures/sand.jpg");
 		t.type = "texture_diffuse";
 		std::vector<Texture> textures;
 		textures.push_back(t);
@@ -213,7 +213,7 @@ private:
 
 	void createRiver()
 	{
-		int riverWidth = 125;
+		int riverWidth = 80;
 		int riverLength = m_MapDim.x / 2;
 
 		std::vector<Vertex> vertices;
@@ -267,7 +267,7 @@ private:
 
 		//textures
 		Texture t;
-		t.id = loadTexture("resources/textures/water1.jpg");
+		t.id = loadTexture("resources/textures/water.jpg");
 		t.type = "texture_diffuse";
 		std::vector<Texture> textures;
 		textures.push_back(t);
@@ -280,7 +280,7 @@ private:
 		int map_width = m_MapDim.x;
 
 		glm::mat4 model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-map_width / 2 * 1.5, -2.0, 10.0));
+		model = glm::translate(model, glm::vec3(-map_width / 2 * 1.5, -2.8, 150.0));
 		model = glm::scale(model, glm::vec3(3.0, 0.0, 3.0));
 		shader.setMat4("model", model);
 		shader.setBool("river", true);

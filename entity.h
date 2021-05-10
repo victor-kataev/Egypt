@@ -41,17 +41,19 @@ public:
 		return m_Material;
 	}
 
-	void Rotate(float angle, glm::vec3 axis)
+	void Rotate(float angle, glm::vec3 axis = glm::vec3(0.0, 1.0, 0.0))
 	{
-		m_ModelMatrix = glm::mat4(1.0);
-		m_ModelMatrix = glm::translate(m_ModelMatrix, m_WorldPos);
-		m_ModelMatrix = glm::rotate(m_ModelMatrix, angle, axis);
-		m_ModelMatrix = glm::scale(m_ModelMatrix, m_Scale);
+		//m_ModelMatrix = glm::mat4(1.0);
+		//m_ModelMatrix = glm::translate(m_ModelMatrix, m_WorldPos);
+		//m_ModelMatrix = glm::rotate(m_ModelMatrix, angle, axis);
+		//m_ModelMatrix = glm::scale(m_ModelMatrix, m_Scale);
+		m_RotAngle = angle;
+		m_RotAxis = axis;
 	}
 
 	void Advance()
 	{
-		m_WorldPos += m_Velocity * m_Direction;
+		//m_WorldPos += m_Velocity * m_Direction;
 		//m_ModelMatrix = glm::translate(m_ModelMatrix, m_WorldPos);
 		ApplyTransformations();
 
@@ -62,6 +64,7 @@ public:
 	void AttachCamera(Camera* cam, glm::vec3 ancorPoint = glm::vec3(0.0))
 	{
 		m_Camera = cam;
+		m_Camera->Movable = false;
 		m_CameraAncorPoint = ancorPoint;
 	}
 

@@ -21,9 +21,6 @@
     <ClCompile Include="mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="scene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h">
@@ -61,15 +58,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="vertex.glsl" />
-    <None Include="vertex1.glsl" />
-    <None Include="vertex_light_source.glsl" />
-    <None Include="fragment_light_source.glsl" />
-    <None Include="fragment.glsl" />
     <None Include=".gitignore" />
-    <None Include="skybox_vertex.glsl" />
-    <None Include="skybox_fragment.glsl" />
-    <None Include="map_vertex.glsl" />
-    <None Include="water_vertex.glsl" />
   </ItemGroup>
 </Project>

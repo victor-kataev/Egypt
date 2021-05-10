@@ -21,6 +21,8 @@ bool disabled = true;
 glm::vec3 g_LightPos(1.0f, 1.0f, 1.3f);
 float yPos = 0.0f;
 
+bool flashlightPressed = false;
+bool cameraStaticPressed = false;
 
 Scene scene;
 
@@ -324,6 +326,25 @@ void processInput(GLFWwindow* window)
         yPos += 0.1f;
     if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
         yPos -= 0.1f;
+
+    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
+        flashlightPressed = true;
+    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_RELEASE && flashlightPressed)
+    {
+        scene.ToggleFlashlight();
+        flashlightPressed = false;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS)
+        cameraStaticPressed = true;
+    
+    if (glfwGetKey(window, GLFW_KEY_C) == GLFW_RELEASE && cameraStaticPressed)
+    {
+        scene.GetCamera()->ToggleStatic();
+        cameraStaticPressed = false;
+    }
+
+
 }
 
 
