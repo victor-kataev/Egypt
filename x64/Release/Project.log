@@ -1,26 +1,25 @@
 ﻿  main.cpp
 C:\Users\victo\OneDrive\Desktop\openGL\Project\shader.h(45,40): warning C4101: 'e': unreferenced local variable
-C:\Users\victo\OneDrive\Desktop\openGL\Project\map.h(141,67): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+C:\Users\victo\OneDrive\Desktop\openGL\Project\map.h(144,67): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
           with
           [
               T=float
           ]
-C:\Users\victo\OneDrive\Desktop\openGL\Project\map.h(180,25): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+C:\Users\victo\OneDrive\Desktop\openGL\Project\map.h(183,25): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
           with
           [
               T=glm::i32
           ]
-C:\Users\victo\OneDrive\Desktop\openGL\Project\map.h(227,20): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+C:\Users\victo\OneDrive\Desktop\openGL\Project\map.h(230,20): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-C:\Users\victo\OneDrive\Desktop\openGL\Project\map.h(229,20): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+C:\Users\victo\OneDrive\Desktop\openGL\Project\map.h(232,20): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-C:\Users\victo\OneDrive\Desktop\openGL\Project\map.h(287,38): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(90,1): warning C4305: 'argument': truncation from 'double' to 'T'
           with
           [
@@ -67,21 +66,22 @@ C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(140,1): warning C4305: 'a
               T=float
           ]
 C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(145,23): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(341,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(435,1): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(436,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(343,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(362,1): warning C4305: '=': truncation from 'double' to 'float'
 C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(444,1): warning C4305: 'argument': truncation from 'double' to 'float'
 C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(445,1): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(449,1): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(450,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(453,1): warning C4305: 'argument': truncation from 'double' to 'float'
 C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(454,1): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(455,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(458,1): warning C4305: 'argument': truncation from 'double' to 'float'
 C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(459,1): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(460,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(463,1): warning C4305: 'argument': truncation from 'double' to 'float'
 C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(464,1): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(465,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(468,1): warning C4305: 'argument': truncation from 'double' to 'float'
 C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(469,1): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(470,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(473,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(474,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(478,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(479,1): warning C4305: 'argument': truncation from 'double' to 'float'
 C:\Users\victo\OneDrive\Desktop\openGL\Project\main.cpp(153,28): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 C:\Users\victo\OneDrive\Desktop\openGL\Project\main.cpp(272,67): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 C:\Users\victo\OneDrive\Desktop\openGL\Project\main.cpp(280,68): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
@@ -127,8 +127,8 @@ C:\Users\victo\OneDrive\Desktop\openGL\Project\scene.h(100): message : see refer
               genType=double
           ]
   Generating code
-  5 of 1295 functions ( 0.4%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    10 functions had inline decision re-evaluated but remain unchanged
+  6 of 1303 functions ( 0.5%) were compiled, the rest were copied from previous compilation.
+    2 functions were new in current compilation
+    21 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   Project.vcxproj -> C:\Users\victo\OneDrive\Desktop\openGL\Project\x64\Release\Project.exe

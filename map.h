@@ -1,5 +1,8 @@
 #pragma once
 
+#include <glm/gtx/matrix_transform_2d.hpp>
+
+
 #include "model.h"
 #include "material.h"
 
@@ -274,7 +277,7 @@ private:
 
 		m_River.CommitGeometry(vertices, indices, textures);
 	}
-
+	
 	void drawRiver(const Shader& shader)
 	{
 		int map_width = m_MapDim.x;
@@ -284,7 +287,12 @@ private:
 		model = glm::scale(model, glm::vec3(3.0, 0.0, 3.0));
 		shader.setMat4("model", model);
 		shader.setBool("river", true);
-		shader.setFloat("time", glfwGetTime());
+		glm::mat3 texTransform = glm::mat3(1.0);
+		texTransform = glm::translate(texTransform, glm::vec2(glfwGetTime(), 0.0));
+		texTransform = glm::rotate(texTransform, (float)glfwGetTime());
+
+		shader.setMat3("texTransform", texTransform);
+		//shader.setFloat("time", glfwGetTime());
 
 		m_River.DrawElements(shader);
 		shader.setBool("river", false);

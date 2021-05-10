@@ -14,6 +14,7 @@ uniform mat4 model;
 
 uniform float time;
 uniform bool river;
+uniform mat3 texTransform;
 
 void main()
 {
@@ -23,5 +24,5 @@ void main()
 	TexCoords = aTexCoords;
 
 	if(river)
-		TexCoords += vec2(0.0, time / 2);
+		TexCoords = vec2(texTransform * vec3(aTexCoords, 1.0));
 }

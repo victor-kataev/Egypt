@@ -309,6 +309,8 @@ private:
 		model = glm::translate(model, glm::vec3(0.0, -112.0, 0));
 		model = glm::scale(model, glm::vec3(1.5, 1, 1.5));
 
+		
+
 		m_Shaders[SHADER_LIGHTING].setMat4("model", model);
 		m_Shaders[SHADER_LIGHTING].setFloat("material.shininess", m_Map->GetMaterial().Shininess);
 		m_Shaders[SHADER_LIGHTING].setVec3("material.ambient", m_Map->GetMaterial().AmbientColor);
@@ -351,8 +353,15 @@ private:
 		
 		float dot = glm::dot(dir, entity.GetDirection());
 		float angle = std::acos(dot);
-		if (angle > 0)
+		if (angle >= 0)
+		{
 			entity.Rotate(entity.GetRotationAngle() - angle);
+		}
+		else
+		{
+			angle = 0.000345267;
+			entity.Rotate(entity.GetRotationAngle() - angle);
+		}
 
 		std::cout << "Dot: " << dot << " Angle: " << angle << std::endl;
 		//std::cout << "Dir new: " << '(' << dir.x << ", " << dir.y << ", " << dir.z << ')' << std::endl;
@@ -441,33 +450,33 @@ private:
 
 		m_Shaders[SHADER_LIGHTING].setVec3("pointLight[0].color", glm::vec3(1.0));
 		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[0].constant", 1.0);
-		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[0].linear", 0.014);
+		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[0].linear", 0.045);
 		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[0].quadratic", 0.0007);
 
 		m_Shaders[SHADER_LIGHTING].setVec3("pointLight[1].color", glm::vec3(1.0));
 		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[1].constant", 1.0);
-		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[1].linear", 0.014);
-		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[1].quadratic", 0.0007);
+		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[1].linear", 0.045);
+		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[1].quadratic", 0.0075);
 
 		m_Shaders[SHADER_LIGHTING].setVec3("pointLight[2].color", glm::vec3(1.0));
 		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[2].constant", 1.0);
-		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[2].linear", 0.014);
-		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[2].quadratic", 0.0007);
+		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[2].linear", 0.045);
+		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[2].quadratic", 0.0075);
 
 		m_Shaders[SHADER_LIGHTING].setVec3("pointLight[3].color", glm::vec3(1.0));
 		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[3].constant", 1.0);
-		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[3].linear", 0.014);
-		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[3].quadratic", 0.0007);
+		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[3].linear", 0.045);
+		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[3].quadratic", 0.0075);
 
 		m_Shaders[SHADER_LIGHTING].setVec3("pointLight[4].color", glm::vec3(1.0));
 		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[4].constant", 1.0);
-		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[4].linear", 0.014);
-		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[4].quadratic", 0.0007);
+		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[4].linear", 0.045);
+		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[4].quadratic", 0.0075);
 
 		m_Shaders[SHADER_LIGHTING].setVec3("pointLight[5].color", glm::vec3(1.0));
 		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[5].constant", 1.0);
-		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[5].linear", 0.014);
-		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[5].quadratic", 0.0007);
+		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[5].linear", 0.045);
+		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[5].quadratic", 0.0075);
 
 		m_Shaders[SHADER_LIGHTING].setBool("flashlight", m_Flashlight);
 
