@@ -12,15 +12,15 @@ uniform mat4 projection;
 uniform mat4 view;
 uniform mat4 model;
 
-uniform float time;
 uniform bool river;
 uniform mat3 texTransform;
 
 void main()
 {
+	
 	gl_Position = projection * view * model * vec4(aPos, 1.0);
-	Normal = aNormal;
 	FragPos = vec3(model * vec4(aPos, 1.0f));
+	Normal = aNormal;
 	TexCoords = aTexCoords;
 
 	if(river)

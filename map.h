@@ -49,7 +49,10 @@ class Map
 {
 public:
 	Map(unsigned char* img, int hfWidth, int hfHeight, int width, int height, Material material)
-		: m_Heightfield(img, hfWidth, hfHeight), m_MapDim(glm::ivec2(width, height)), m_HeightPrcnt(1.0), m_Origin(-512.0, -768.0), m_Material(material)
+		: m_Heightfield(img, hfWidth, hfHeight),
+		m_MapDim(glm::ivec2(width, height)),
+		m_Origin(-512.0, -768.0),
+		m_Material(material)
 	{
 		std::vector<Vertex> vertices = ComposeVertices();
 		std::vector<unsigned int> indices = ComposeIndices();
@@ -133,6 +136,16 @@ public:
 
 	void Draw(const Shader& shader)
 	{
+		glm::mat4 model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0, -112.0, 0));
+		model = glm::scale(model, glm::vec3(1.5, 1, 1.5));
+
+		shader.setMat4("model", model);
+		shader.setFloat("material.shininess", m_Material.Shininess);
+		shader.setVec3("material.ambient", m_Material.AmbientColor);
+		shader.setVec3("material.diffuse", m_Material.DiffuseColor);
+		shader.setVec3("material.specular", m_Material.SpecularColor);
+
 		m_MapModel.DrawElements(shader);
 		drawRiver(shader);
 	}
@@ -191,11 +204,9 @@ private:
 
 	Heightfield m_Heightfield;
 	glm::ivec2 m_MapDim;
-	float m_HeightPrcnt; // [0.0, 1.0]
 	glm::vec2 m_Origin;
 	Model m_MapModel;
 	Material m_Material;
-	float m_SeaLevel;
 	Model m_River;
 
 private:

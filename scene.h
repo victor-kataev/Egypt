@@ -15,17 +15,22 @@
 #include "utilities.h"
 
 
-#define MPYRAMID1 0
-#define MPYRAMID2 1
-#define MPYRAMID3 2
-#define MTEMPLE1 3
-#define MTEMPLE2 4
-#define MTEMPLE3 5
-#define MOBELISK 6
-#define MHOUSES3 7
-#define MSHIP 8
-#define MWOODENBOX 9
-#define MTORCH 10
+#define PI 3.14159265359
+#define E  2.71828182845
+
+#define MPYRAMID1		0
+#define MPYRAMID2		1
+#define MPYRAMID3		2
+#define MTEMPLE1		3
+#define MTEMPLE2		4
+#define MTEMPLE3		5
+#define MOBELISK		6
+#define MHOUSES3		7
+#define MSHIP			8
+#define MWOODENBOX		9
+#define MTORCH			10
+#define MMINIPYRAMIDS	11
+
 
 #define SHADER_LIGHTING 0
 #define SHADER_SKYBOX   1
@@ -68,22 +73,22 @@ public:
 	{
 		m_Cameras.emplace_back(glm::vec3(0.0, 5.0, 3.0));
 		m_Cameras.emplace_back(glm::vec3(-10.0, 5.0, 3.0));
+		m_Cameras.emplace_back(glm::vec3(0.0, 100.0, -350.0), true);
 		m_Cameras.emplace_back(glm::vec3(10.0, 20.0, 3.0));
-		m_Cameras.emplace_back(glm::vec3(10.0, 20.0, 3.0));
-		m_MainCamera = &m_Cameras[1];
+		m_MainCamera = &m_Cameras[0];
 
 		m_SunPosition = glm::vec3(10.0f);
 		m_SunColor = glm::vec3(1.0f);
 		m_LightDir = glm::vec3(-0.5f, -0.9, 0.8);
 
 		m_InitialTime = 230.0;
-		m_DeltaTime = 5.0;
+		m_DeltaTime = 1.0;
 		m_Flashlight = false;
 	}
 	 
 	void Init()
 	{
-		setUpShaders();
+		createShaders();
 
 		createSkybox();
 
@@ -97,7 +102,7 @@ public:
 		m_Entities.emplace_back(&m_Models[MPYRAMID1], material, glm::vec3(0.0f, 0.0f, -310.0f), glm::vec3(8.0));
 		m_Entities.emplace_back(&m_Models[MPYRAMID2], material, glm::vec3(300.0f, 0.0, -280.0), glm::vec3(8.0));
 		m_Entities.emplace_back(&m_Models[MPYRAMID3], material, glm::vec3(-300.0f, 0.0, -180.0), glm::vec3(8.0));
-		m_Entities.emplace_back(&m_Models[MSHIP], material, glm::vec3(0.0f, 0.0, 0.0), glm::vec3(0.2), glm::radians(0.0));
+		m_Entities.emplace_back(&m_Models[MSHIP], material, glm::vec3(0.0f, -5.0, 0.0), glm::vec3(0.2), glm::radians(0.0));
 		m_Entities[m_Entities.size() - 1].SetDirection(glm::vec3(0.0, 0.0, 1.0));
 		m_Entities[m_Entities.size() - 1].SetVelocity(5.5);
 		m_Entities[m_Entities.size() - 1].AttachCamera(&m_Cameras[1], glm::vec3(2.0, 5.0, -1.0));
@@ -127,30 +132,32 @@ public:
 		m_Entities.emplace_back(&m_Models[MHOUSES3], material, glm::vec3(50.0f, 0.0, -100.0), glm::vec3(2.0));
 		m_Entities.emplace_back(&m_Models[MTEMPLE1], material, glm::vec3(160.0f, 0.0, -180.0), glm::vec3(1.0));
 
-		m_Entities.emplace_back(&m_Models[MTEMPLE2], material, glm::vec3(20.0f, 0.0, 60.0), glm::vec3(4.3));
+		m_Entities.emplace_back(&m_Models[MTEMPLE2], material, glm::vec3(50.0f, 0.0, -5.0), glm::vec3(4.3), glm::radians(-90.0f));
 		m_Entities.emplace_back(&m_Models[MWOODENBOX], material, glm::vec3(-25.0f, 0.5, -37.7), glm::vec3(0.5));
 		m_Entities.emplace_back(&m_Models[MWOODENBOX], material, glm::vec3(-25.0f, 1.0, -37.3), glm::vec3(0.5), glm::radians(30.0f));
 		m_Entities.emplace_back(&m_Models[MWOODENBOX], material, glm::vec3(-25.0f, 0.5, -37.1), glm::vec3(0.5), glm::radians(50.0f));
 
-		m_Entities.emplace_back(&m_Models[MTORCH], material, glm::vec3(-96.0, 1.0, -150.0), glm::vec3(0.05));
-		m_Entities.emplace_back(&m_Models[MTORCH], material, glm::vec3(-86.0f, 1.0, -148.0), glm::vec3(0.05));
-		m_Entities.emplace_back(&m_Models[MTORCH], material, glm::vec3(10.0f, 0.5, -30.0), glm::vec3(0.05));
-		m_Entities.emplace_back(&m_Models[MTORCH], material, glm::vec3(15.0f, 0.5, -30.0), glm::vec3(0.05));
+		m_Entities.emplace_back(&m_Models[MTORCH], material, glm::vec3(0.0, 1.0, -315.0), glm::vec3(0.05));
+		m_Entities.emplace_back(&m_Models[MTORCH], material, glm::vec3(-90.0f, 1.0, -148.0), glm::vec3(0.05));
+		m_Entities.emplace_back(&m_Models[MTORCH], material, glm::vec3(42.0f, 0.5, -12.0), glm::vec3(0.05));
+		m_Entities.emplace_back(&m_Models[MTORCH], material, glm::vec3(90.0f, 0.5, -13.0), glm::vec3(0.05));
 		m_Entities.emplace_back(&m_Models[MTORCH], material, glm::vec3(50.0f, 0.5, -200.0), glm::vec3(0.05));
 		m_Entities.emplace_back(&m_Models[MTORCH], material, glm::vec3(160.0f, 0.5, -180.0), glm::vec3(0.05));
+
+		m_Entities.emplace_back(&m_Models[MMINIPYRAMIDS], material, glm::vec3(-260.0, 0.0, -100.0), glm::vec3(3.0), glm::radians(-90.0f));
 	}
 
 	void Render()
 	{
 		m_Time = glfwGetTime();
 
-		drawSkybox(m_Time);
+		drawSkybox();
 		processDayLight();
 
 		m_Shaders[SHADER_LIGHTING].use();
 		bindScene();
 
-		drawMap();
+		m_Map->Draw(m_Shaders[SHADER_LIGHTING]);
 
 		for (auto& entity : m_Entities)
 		{
@@ -277,7 +284,7 @@ private:
 		cubeMapTextureNight = loadCubemapTexture(facesNight);
 	}
 
-	void drawSkybox(float time)
+	void drawSkybox()
 	{
 		glDepthMask(GL_FALSE);
 		m_Shaders[SHADER_SKYBOX].use();
@@ -301,24 +308,6 @@ private:
 		unsigned char* data = stbi_load("resources/maps/map_clouds.png", &width, &height, &nrComponents, 1);
 
 		m_Map = std::make_shared<Map>(data, width, height, width, height, material);
-	}
-
-	void drawMap()
-	{
-		glm::mat4 model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0, -112.0, 0));
-		model = glm::scale(model, glm::vec3(1.5, 1, 1.5));
-
-		
-
-		m_Shaders[SHADER_LIGHTING].setMat4("model", model);
-		m_Shaders[SHADER_LIGHTING].setFloat("material.shininess", m_Map->GetMaterial().Shininess);
-		m_Shaders[SHADER_LIGHTING].setVec3("material.ambient", m_Map->GetMaterial().AmbientColor);
-		m_Shaders[SHADER_LIGHTING].setVec3("material.diffuse", m_Map->GetMaterial().DiffuseColor);
-		m_Shaders[SHADER_LIGHTING].setVec3("material.specular", m_Map->GetMaterial().SpecularColor);
-		
-		m_Map->Draw(m_Shaders[SHADER_LIGHTING]);
-
 	}
 
 	void handleCollision(Entity & entity)
@@ -348,7 +337,7 @@ private:
 		float prevx = h + a * cos((time - 1) / 10);
 		float prevz = k + b * sin((time - 1) / 10);
 		
-		glm::vec3 dir = glm::normalize(glm::vec3(x, 0.0, z) - pos);
+		glm::vec3 dir = glm::normalize(glm::vec3(x, pos.y, z) - pos);
 		pos = glm::vec3(x, pos.y, z);
 		
 		float dot = glm::dot(dir, entity.GetDirection());
@@ -357,13 +346,13 @@ private:
 		{
 			entity.Rotate(entity.GetRotationAngle() - angle);
 		}
-		else
+		/*else
 		{
-			angle = 0.000345267;
+			angle = 0.000005267;
 			entity.Rotate(entity.GetRotationAngle() - angle);
-		}
+		}*/
 
-		std::cout << "Dot: " << dot << " Angle: " << angle << std::endl;
+		//std::cout << "Dot: " << dot << " Angle: " << angle << std::endl;
 		//std::cout << "Dir new: " << '(' << dir.x << ", " << dir.y << ", " << dir.z << ')' << std::endl;
 		//std::cout << "Dir curr: " << '(' << entity.GetDirection().x << ", " << entity.GetDirection().y << ", " << entity.GetDirection().z << ')' << std::endl;
 		//std::cout << " Pos new: " << '(' << x << ", " << 0.0 << ", " << z << ')' << std::endl;
@@ -381,16 +370,18 @@ private:
 
 	void processDayLight()
 	{
+		float time = m_InitialTime + m_Time * m_DeltaTime;
+		float sinValue = glm::sin(glm::radians(time));
+		float cosValue = glm::cos(glm::radians(time));
 
-		float sinValue = glm::sin(glm::radians(m_InitialTime + m_Time * 10));
-		float cosValue = glm::cos(glm::radians(m_InitialTime + m_Time * 10));
+		//normal distribution N(3.9, 2)
+		float daytime = 1 / sqrt(2.0 * PI * 2.0) * powf(E, -0.5 * ((3.5 * abs(sinValue) - 3.9) * (3.5 * abs(sinValue) - 3.9)) / 2.0);
+		daytime *= 3.7;
 
-#if 0
-		std::cout << "Time = " << m_Time << std::endl;
-		std::cout << "sinValue = " << sinValue << std::endl;
-#endif
+		if (daytime > 1.0)
+			daytime = 1.0;
 
-		if (sinValue <= 0.5)
+		if (daytime <= 0.4)
 		{
 			m_Night = true;
 		}
@@ -399,34 +390,24 @@ private:
 			m_Night = false;
 		}
 
-		/*
-		if (sinValue <= 0.1)
-		{
-			m_SunColor = glm::vec3(0.1);
-		}
-		else
-		{
-			m_SunColor = glm::vec3(sinValue);
-		}
-		*/
-		
-#if 0
-		std::cout << "Night = " << m_Night << std::endl;
-		std::cout << "---------" << std::endl;
-#endif
+
+		m_SunColor = glm::vec3(daytime);
 
 		m_Shaders[SHADER_SKYBOX].use();
-		if (sinValue < 0)
+
+		if(daytime < 0.05)
 			m_Shaders[SHADER_SKYBOX].setFloat("time", 0.0);
 		else
-			m_Shaders[SHADER_SKYBOX].setFloat("time", abs(sinValue));
+			m_Shaders[SHADER_SKYBOX].setFloat("time", daytime);
 
-
-		//m_LightDir = glm::vec3(cosValue, -sinValue, -0.1);
+		if (sinValue < 0.0)
+			m_LightDir = glm::vec3(-cosValue, sinValue, -0.1);
+		else
+			m_LightDir = glm::vec3(cosValue, -sinValue, -0.1);
 
 	}
 
-	void setUpShaders()
+	void createShaders()
 	{
 		m_Shaders.emplace_back("resources/shaders/vertex.glsl", "resources/shaders/fragment.glsl");
 		m_Shaders.emplace_back("resources/shaders/skybox_vertex.glsl", "resources/shaders/skybox_fragment.glsl");
@@ -446,37 +427,18 @@ private:
 		m_Shaders[SHADER_LIGHTING].setFloat("spotlight.cutOff", glm::cos(glm::radians(12.5f)));
 		m_Shaders[SHADER_LIGHTING].setFloat("spotlight.outerCutOff", glm::cos(glm::radians(17.5f)));
 
-		m_Shaders[SHADER_LIGHTING].setInt("nPointLights", 6);
 
-		m_Shaders[SHADER_LIGHTING].setVec3("pointLight[0].color", glm::vec3(1.0));
-		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[0].constant", 1.0);
-		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[0].linear", 0.045);
-		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[0].quadratic", 0.0007);
+		int plCnt = 6;
+		m_Shaders[SHADER_LIGHTING].setInt("nPointLights", plCnt);
 
-		m_Shaders[SHADER_LIGHTING].setVec3("pointLight[1].color", glm::vec3(1.0));
-		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[1].constant", 1.0);
-		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[1].linear", 0.045);
-		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[1].quadratic", 0.0075);
-
-		m_Shaders[SHADER_LIGHTING].setVec3("pointLight[2].color", glm::vec3(1.0));
-		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[2].constant", 1.0);
-		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[2].linear", 0.045);
-		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[2].quadratic", 0.0075);
-
-		m_Shaders[SHADER_LIGHTING].setVec3("pointLight[3].color", glm::vec3(1.0));
-		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[3].constant", 1.0);
-		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[3].linear", 0.045);
-		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[3].quadratic", 0.0075);
-
-		m_Shaders[SHADER_LIGHTING].setVec3("pointLight[4].color", glm::vec3(1.0));
-		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[4].constant", 1.0);
-		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[4].linear", 0.045);
-		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[4].quadratic", 0.0075);
-
-		m_Shaders[SHADER_LIGHTING].setVec3("pointLight[5].color", glm::vec3(1.0));
-		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[5].constant", 1.0);
-		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[5].linear", 0.045);
-		m_Shaders[SHADER_LIGHTING].setFloat("pointLight[5].quadratic", 0.0075);
+		for (int i = 0; i < plCnt; i++)
+		{
+			std::string istr = std::to_string(i);
+			m_Shaders[SHADER_LIGHTING].setVec3("pointLight[" + istr + "].color", glm::vec3(1.0));
+			m_Shaders[SHADER_LIGHTING].setFloat("pointLight[" + istr + "].constant", 1.0);
+			m_Shaders[SHADER_LIGHTING].setFloat("pointLight[" + istr + "].linear", 0.045);
+			m_Shaders[SHADER_LIGHTING].setFloat("pointLight[" + istr + "].quadratic", 0.0007);
+		}
 
 		m_Shaders[SHADER_LIGHTING].setBool("flashlight", m_Flashlight);
 
@@ -533,17 +495,18 @@ private:
 		m_Models.push_back(woodenBox);
 		
 		m_Models.emplace_back("resources/models/egypt/torch.obj");
+		m_Models.emplace_back("resources/models/egypt/mini_pyramids.obj");
 
 	}
 
 	void setPointLights()
 	{
-		pointLightPositions.push_back(glm::vec3(-96.0, 1.0, -150.0));
-		pointLightPositions.push_back(glm::vec3(-86.0f, 1.0, -148.0));
-		pointLightPositions.push_back(glm::vec3(10.0f, 1.0, -30.0));
-		pointLightPositions.push_back(glm::vec3(15.0f, 1.0, -30.0));
-		pointLightPositions.push_back(glm::vec3(50.0f, 1.0, -200.0));
-		pointLightPositions.push_back(glm::vec3(160.0f, 1.0, -180.0));
+		pointLightPositions.push_back(glm::vec3(0.0, 2.0, -315.0));
+		pointLightPositions.push_back(glm::vec3(-90.0f, 2.0, -148.0));
+		pointLightPositions.push_back(glm::vec3(42.0f, 2.0, -12.0));
+		pointLightPositions.push_back(glm::vec3(90.0f, 2.0, -13.0));
+		pointLightPositions.push_back(glm::vec3(50.0f, 2.0, -200.0));
+		pointLightPositions.push_back(glm::vec3(160.0f, 2.0, -180.0));
 	}
 
 };
