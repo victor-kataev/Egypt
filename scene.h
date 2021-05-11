@@ -72,9 +72,9 @@ public:
 	Scene()
 	{
 		m_Cameras.emplace_back(glm::vec3(0.0, 5.0, 3.0));
+		m_Cameras.emplace_back(glm::vec3(0.0, 170.0, -450.0), true, true, 90.0f, -35.0f);
+		m_Cameras.emplace_back(glm::vec3(153.7, 2.8, -218.3), true, true, 173.0f);
 		m_Cameras.emplace_back(glm::vec3(-10.0, 5.0, 3.0));
-		m_Cameras.emplace_back(glm::vec3(0.0, 100.0, -350.0), true);
-		m_Cameras.emplace_back(glm::vec3(10.0, 20.0, 3.0));
 		m_MainCamera = &m_Cameras[0];
 
 		m_SunPosition = glm::vec3(10.0f);
@@ -105,7 +105,7 @@ public:
 		m_Entities.emplace_back(&m_Models[MSHIP], material, glm::vec3(0.0f, -5.0, 0.0), glm::vec3(0.2), glm::radians(0.0));
 		m_Entities[m_Entities.size() - 1].SetDirection(glm::vec3(0.0, 0.0, 1.0));
 		m_Entities[m_Entities.size() - 1].SetVelocity(5.5);
-		m_Entities[m_Entities.size() - 1].AttachCamera(&m_Cameras[1], glm::vec3(2.0, 5.0, -1.0));
+		m_Entities[m_Entities.size() - 1].AttachCamera(&m_Cameras[3], glm::vec3(2.0, 5.0, -1.0));
 
 		m_Entities.emplace_back(&m_Models[MOBELISK], material, glm::vec3(-90.0f, 0.01, -180.0), glm::vec3(2.0));
 
@@ -158,6 +158,8 @@ public:
 		bindScene();
 
 		m_Map->Draw(m_Shaders[SHADER_LIGHTING]);
+
+		std::cout << m_MainCamera->Position.x << " " << m_MainCamera->Position.y << " " << m_MainCamera->Position.z << std::endl;
 
 		for (auto& entity : m_Entities)
 		{
@@ -352,20 +354,9 @@ private:
 			entity.Rotate(entity.GetRotationAngle() - angle);
 		}*/
 
-		//std::cout << "Dot: " << dot << " Angle: " << angle << std::endl;
-		//std::cout << "Dir new: " << '(' << dir.x << ", " << dir.y << ", " << dir.z << ')' << std::endl;
-		//std::cout << "Dir curr: " << '(' << entity.GetDirection().x << ", " << entity.GetDirection().y << ", " << entity.GetDirection().z << ')' << std::endl;
-		//std::cout << " Pos new: " << '(' << x << ", " << 0.0 << ", " << z << ')' << std::endl;
-		//std::cout << " Pos prev: " << '(' << prevx << ", " << 0.0 << ", " << prevz << ')' << std::endl;
-		//std::cout << "------" << std::endl;
 
 		entity.SetPosition(pos);
 		entity.SetDirection(dir);
-		//entity.Rotate(glm::radians(anglePhi));
-		//float angle = entity.GetRotationAngle();
-		//front.x = cos(glm::radians(anglePhi)) * cos(glm::radians(0.0));
-		//front.y = sin(glm::radians(0.0));
-		//front.z = sin(glm::radians(anglePhi)) * cos(glm::radians(0.0));
 	}
 
 	void processDayLight()
