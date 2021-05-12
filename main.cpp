@@ -4,6 +4,7 @@
 #include <math.h>
 #include <iostream>
 
+#define STB_IMAGE_IMPLEMENTATION
 #include "scene.h"
 #include "params.h"
 

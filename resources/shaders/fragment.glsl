@@ -51,23 +51,20 @@ struct SpotlightLight
 
 
 uniform vec3 viewerPos;
-//uniform float time;
 uniform vec3 SunColor;
-uniform vec3 SunPosition;
 
-uniform Material material;
-//uniform Light light;
 #define PLN 10
 uniform int nPointLights;
 
+uniform Material material;
 uniform DirectionalLight dirLight;
 uniform PointLight pointLight[PLN];
 uniform SpotlightLight spotlight;
 
 
-vec3 DirLightImpact(vec3 normal);
-vec3 PointLightImpact(PointLight pointLight, vec3 normal);
-vec3 SpotlightImpact(vec3 normal);
+vec3 DirLightImpact();
+vec3 PointLightImpact(PointLight pointLight);
+vec3 SpotlightImpact();
 
 uniform bool night;
 uniform bool flashlight;
@@ -76,28 +73,27 @@ void main()
 {
 
 	vec3 result = vec3(0.0);
-	vec3 norm = normalize(Normal);
 	
-	result += DirLightImpact(norm);
+	result += DirLightImpact();
 
 	if(night)
 		for(int i = 0; i < nPointLights; i++)
-			result += PointLightImpact(pointLight[i], norm);
+			result += PointLightImpact(pointLight[i]);
 
 	if(flashlight)
-		result += SpotlightImpact(norm);
+		result += SpotlightImpact();
 
 	color = vec4(result, 1.0);
 }
 
 
-vec3 DirLightImpact(vec3 normal)
+vec3 DirLightImpact()
 {
 	vec3 lightDir = normalize(-dirLight.dir);
 	
-	float diffuseImpact = max(dot(lightDir, normal), 0.0);
+	float diffuseImpact = max(dot(lightDir, Normal), 0.0);
 
-	vec3 reflected = reflect(-lightDir, normal);
+	vec3 reflected = reflect(-lightDir, Normal);
 	vec3 viewerDir = normalize(viewerPos - FragPos);
 	float specularImpact = pow(max(dot(reflected, viewerDir), 0.0), material.shininess);
 
@@ -108,13 +104,13 @@ vec3 DirLightImpact(vec3 normal)
 	return ambient + diffuse + specular;
 }
 
-vec3 PointLightImpact(PointLight light, vec3 normal)
+vec3 PointLightImpact(PointLight light)
 {
 	vec3 lightDir = normalize(light.position - FragPos);
 
-	float diffuseImpact = max(dot(lightDir, normal), 0.0);
+	float diffuseImpact = max(dot(lightDir, Normal), 0.0);
 
-	vec3 reflected = reflect(-lightDir, normal);
+	vec3 reflected = reflect(-lightDir, Normal);
 	vec3 viewerDir = normalize(viewerPos - FragPos);
 	float specularImpact = pow(max(dot(reflected, viewerDir), 0.0) , material.shininess);
 
@@ -132,7 +128,7 @@ vec3 PointLightImpact(PointLight light, vec3 normal)
 	return ambient + diffuse + specular;
 }
 
-vec3 SpotlightImpact(vec3 normal)
+vec3 SpotlightImpact()
 {
 	vec3 lightDir = normalize(spotlight.position - FragPos);
 	float theta = dot(lightDir, normalize(-spotlight.dir));
@@ -147,6 +143,6 @@ vec3 SpotlightImpact(vec3 normal)
 	pl.quadratic = spotlight.quadratic;
 	pl.color = spotlight.color;
 
-	vec3 result = PointLightImpact(pl, normal);
+	vec3 result = PointLightImpact(pl);
 	return result * intensity;
 }

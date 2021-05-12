@@ -5,22 +5,8 @@
 struct Material
 {
 	Material() = default;
-
-	Material(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, float shininess)
-	{
-		AmbientColor = ambient;
-		DiffuseColor = diffuse;
-		SpecularColor = specular;
-		Shininess = shininess;
-	}
-
-	void Bind(Shader & shader)
-	{
-		shader.setFloat("material.shininess", Shininess);
-		shader.setVec3("material.ambient", AmbientColor);
-		shader.setVec3("material.diffuse", DiffuseColor);
-		shader.setVec3("material.specular", SpecularColor);
-	}
+	Material(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, float shininess);
+	void Bind(Shader& shader);
 
 	glm::vec3 AmbientColor;
 	glm::vec3 DiffuseColor;

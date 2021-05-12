@@ -1,107 +1,31 @@
 #pragma once
 
+#include "camera.h"
 #include "model.h"
 #include "material.h"
 
 class Entity
 {
 public:
-	Entity(Model* model, Material material, const glm::vec3& pos, const glm::vec3 & scale, float angle = 0.0, glm::vec3 axis = glm::vec3(0.0, 1.0, 0.0))
-		: 
-		m_Model(model),
-		m_Material(material),
-		m_WorldPos(pos),
-		m_Scale(scale),
-		m_RotAngle(angle),
-		m_RotAxis(axis),
-		m_Direction(0.0, 1.0, 0.0),
-		m_Velocity(0.0),
-		m_Camera(NULL)
-	{
-		ApplyTransformations();
-	}
+	Entity(Model* model, Material material, const glm::vec3& pos, const glm::vec3& scale, float angle = 0.0, glm::vec3 axis = glm::vec3(0.0, 1.0, 0.0));
+	
+	glm::vec3 GetPosition() const;
+	glm::mat4 GetModelMatrix() const;
+	void Draw(const Shader& shader) const;
+	Material& GetMaterial();
+	void Rotate(float angle, glm::vec3 axis = glm::vec3(0.0, 1.0, 0.0));
+	void Advance();
+	void AttachCamera(Camera* cam, glm::vec3 ancorPoint = glm::vec3(0.0));
+	void SetPosition(glm::vec3 pos);
+	void SetDirection(const glm::vec3 dir);
+	void SetVelocity(float vel);
+	glm::vec3 GetDirection() const;
+	Model* GetModel() const;
+	float GetRotationAngle() const;
+	void BindMaterial(Shader& shader);
 
-	glm::vec3 GetPosition() const
-	{
-		return m_WorldPos;
-	}
-
-	glm::mat4 GetModelMatrix() const
-	{
-		return m_ModelMatrix;
-	}
-
-	void Draw(const Shader& shader) const
-	{
-			m_Model->DrawElements(shader);
-	}
-
-	Material& GetMaterial()
-	{
-		return m_Material;
-	}
-
-	void Rotate(float angle, glm::vec3 axis = glm::vec3(0.0, 1.0, 0.0))
-	{
-		//m_ModelMatrix = glm::mat4(1.0);
-		//m_ModelMatrix = glm::translate(m_ModelMatrix, m_WorldPos);
-		//m_ModelMatrix = glm::rotate(m_ModelMatrix, angle, axis);
-		//m_ModelMatrix = glm::scale(m_ModelMatrix, m_Scale);
-		m_RotAngle = angle;
-		m_RotAxis = axis;
-	}
-
-	void Advance()
-	{
-		//m_WorldPos += m_Velocity * m_Direction;
-		//m_ModelMatrix = glm::translate(m_ModelMatrix, m_WorldPos);
-		ApplyTransformations();
-
-		if (m_Camera)
-			m_Camera->Position = m_WorldPos + m_CameraAncorPoint;
-	}
-
-	void AttachCamera(Camera* cam, glm::vec3 ancorPoint = glm::vec3(0.0))
-	{
-		m_Camera = cam;
-		m_Camera->Movable = false;
-		m_CameraAncorPoint = ancorPoint;
-	}
-
-	void SetPosition(glm::vec3 pos)
-	{
-		m_WorldPos = pos;
-	}
-
-	void SetDirection(const glm::vec3 dir)
-	{
-		m_Direction = glm::normalize(dir);
-	}
-
-	void SetVelocity(float vel)
-	{
-		m_Velocity = vel;
-	}
-
-	glm::vec3 GetDirection() const
-	{
-		return m_Direction;
-	}
-
-	Model* GetModel() const
-	{
-		return m_Model;
-	}
-
-	float GetRotationAngle() const
-	{
-		return m_RotAngle;
-	}
-
-	void BindMaterial(Shader& shader)
-	{
-		m_Material.Bind(shader);
-	}
+private:
+	void applyTransformations();
 
 private:
 	Model* m_Model;
@@ -116,12 +40,4 @@ private:
 	Camera* m_Camera;
 	glm::vec3 m_CameraAncorPoint;
 
-private:
-	void ApplyTransformations()
-	{
-		m_ModelMatrix = glm::mat4(1.0);
-		m_ModelMatrix = glm::translate(m_ModelMatrix, m_WorldPos);
-		m_ModelMatrix = glm::rotate(m_ModelMatrix, m_RotAngle, m_RotAxis);
-		m_ModelMatrix = glm::scale(m_ModelMatrix, m_Scale);
-	}
 };
