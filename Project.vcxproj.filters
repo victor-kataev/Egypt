@@ -68,9 +68,6 @@
     <ClInclude Include="src\params.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\utilities.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\map.h">
       <Filter>Header Files</Filter>
     </ClInclude>

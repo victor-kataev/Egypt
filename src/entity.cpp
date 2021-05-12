@@ -1,100 +1,104 @@
 #include "entity.h"
 
-Entity::Entity(Model* model, Material material, const glm::vec3& pos, const glm::vec3& scale, float angle, glm::vec3 axis)
-	:
-	m_Model(model),
-	m_Material(material),
-	m_WorldPos(pos),
-	m_Scale(scale),
-	m_RotAngle(angle),
-	m_RotAxis(axis),
-	m_Direction(0.0, 1.0, 0.0),
-	m_Velocity(0.0),
-	m_Camera(NULL)
+namespace kataevic
 {
-	applyTransformations();
-}
 
-glm::vec3 Entity::GetPosition() const
-{
-	return m_WorldPos;
-}
+	Entity::Entity(Model* model, Material material, const glm::vec3& pos, const glm::vec3& scale, float angle, glm::vec3 axis)
+		:
+		m_Model(model),
+		m_Material(material),
+		m_WorldPos(pos),
+		m_Scale(scale),
+		m_RotAngle(angle),
+		m_RotAxis(axis),
+		m_Direction(0.0, 1.0, 0.0),
+		m_Velocity(0.0),
+		m_Camera(NULL)
+	{
+		applyTransformations();
+	}
 
-glm::mat4 Entity::GetModelMatrix() const
-{
-	return m_ModelMatrix;
-}
+	glm::vec3 Entity::GetPosition() const
+	{
+		return m_WorldPos;
+	}
 
-void Entity::Draw(const Shader& shader) const
-{
-	m_Model->DrawElements(shader);
-}
+	glm::mat4 Entity::GetModelMatrix() const
+	{
+		return m_ModelMatrix;
+	}
 
-Material& Entity::GetMaterial()
-{
-	return m_Material;
-}
+	void Entity::Draw(const Shader& shader) const
+	{
+		m_Model->DrawElements(shader);
+	}
 
-void Entity::Rotate(float angle, glm::vec3 axis)
-{
-	m_RotAngle = angle;
-	m_RotAxis = axis;
-}
+	Material& Entity::GetMaterial()
+	{
+		return m_Material;
+	}
 
-void Entity::Advance()
-{
-	applyTransformations();
+	void Entity::Rotate(float angle, glm::vec3 axis)
+	{
+		m_RotAngle = angle;
+		m_RotAxis = axis;
+	}
 
-	if (m_Camera)
-		m_Camera->Position = m_WorldPos + m_CameraAncorPoint;
-}
+	void Entity::Advance()
+	{
+		applyTransformations();
 
-void Entity::AttachCamera(Camera* cam, glm::vec3 ancorPoint)
-{
-	m_Camera = cam;
-	m_Camera->Movable = false;
-	m_CameraAncorPoint = ancorPoint;
-}
+		if (m_Camera)
+			m_Camera->Position = m_WorldPos + m_CameraAncorPoint;
+	}
 
-void Entity::SetPosition(glm::vec3 pos)
-{
-	m_WorldPos = pos;
-}
+	void Entity::AttachCamera(Camera* cam, glm::vec3 ancorPoint)
+	{
+		m_Camera = cam;
+		m_Camera->Movable = false;
+		m_CameraAncorPoint = ancorPoint;
+	}
 
-void Entity::SetDirection(const glm::vec3 dir)
-{
-	m_Direction = glm::normalize(dir);
-}
+	void Entity::SetPosition(glm::vec3 pos)
+	{
+		m_WorldPos = pos;
+	}
 
-void Entity::SetVelocity(float vel)
-{
-	m_Velocity = vel;
-}
+	void Entity::SetDirection(const glm::vec3 dir)
+	{
+		m_Direction = glm::normalize(dir);
+	}
 
-glm::vec3 Entity::GetDirection() const
-{
-	return m_Direction;
-}
+	void Entity::SetVelocity(float vel)
+	{
+		m_Velocity = vel;
+	}
 
-Model* Entity::GetModel() const
-{
-	return m_Model;
-}
+	glm::vec3 Entity::GetDirection() const
+	{
+		return m_Direction;
+	}
 
-float Entity::GetRotationAngle() const
-{
-	return m_RotAngle;
-}
+	Model* Entity::GetModel() const
+	{
+		return m_Model;
+	}
 
-void Entity::BindMaterial(Shader& shader)
-{
-	m_Material.Bind(shader);
-}
+	float Entity::GetRotationAngle() const
+	{
+		return m_RotAngle;
+	}
 
-void Entity::applyTransformations()
-{
-	m_ModelMatrix = glm::mat4(1.0);
-	m_ModelMatrix = glm::translate(m_ModelMatrix, m_WorldPos);
-	m_ModelMatrix = glm::rotate(m_ModelMatrix, m_RotAngle, m_RotAxis);
-	m_ModelMatrix = glm::scale(m_ModelMatrix, m_Scale);
+	void Entity::BindMaterial(Shader& shader)
+	{
+		m_Material.Bind(shader);
+	}
+
+	void Entity::applyTransformations()
+	{
+		m_ModelMatrix = glm::mat4(1.0);
+		m_ModelMatrix = glm::translate(m_ModelMatrix, m_WorldPos);
+		m_ModelMatrix = glm::rotate(m_ModelMatrix, m_RotAngle, m_RotAxis);
+		m_ModelMatrix = glm::scale(m_ModelMatrix, m_Scale);
+	}
 }

@@ -1,1 +1,93 @@
-﻿  Project.vcxproj -> C:\Users\victo\OneDrive\Desktop\openGL\Project\x64\Release\Project.exe
+﻿  scene.cpp
+C:\Users\victo\OneDrive\Desktop\openGL\Project\src\scene.h(6,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+C:\Users\victo\OneDrive\Desktop\openGL\Project\src\scene.cpp(145,30): warning C4305: 'argument': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+C:\Users\victo\OneDrive\Desktop\openGL\Project\src\scene.cpp(155,96): warning C4305: 'argument': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+C:\Users\victo\OneDrive\Desktop\openGL\Project\src\scene.cpp(185,100): warning C4305: 'argument': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+C:\Users\victo\OneDrive\Desktop\openGL\Project\src\scene.cpp(190,99): warning C4305: 'argument': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+C:\Users\victo\OneDrive\Desktop\openGL\Project\src\scene.cpp(191,102): warning C4305: 'argument': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+C:\Users\victo\OneDrive\Desktop\openGL\Project\src\scene.cpp(192,100): warning C4305: 'argument': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+C:\Users\victo\OneDrive\Desktop\openGL\Project\src\scene.cpp(193,100): warning C4305: 'argument': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+C:\Users\victo\OneDrive\Desktop\openGL\Project\src\scene.cpp(194,101): warning C4305: 'argument': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+C:\Users\victo\OneDrive\Desktop\openGL\Project\src\scene.cpp(195,102): warning C4305: 'argument': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+C:\Users\victo\OneDrive\Desktop\openGL\Project\src\scene.cpp(202,23): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\victo\OneDrive\Desktop\openGL\Project\src\scene.cpp(358,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\victo\OneDrive\Desktop\openGL\Project\src\scene.cpp(387,121): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\victo\OneDrive\Desktop\openGL\Project\src\scene.cpp(387,126): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\victo\OneDrive\Desktop\openGL\Project\src\scene.cpp(387,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\victo\OneDrive\Desktop\openGL\Project\src\scene.cpp(388,17): warning C4305: '*=': truncation from 'double' to 'float'
+C:\Users\victo\OneDrive\Desktop\openGL\Project\src\scene.cpp(433,64): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\victo\OneDrive\Desktop\openGL\Project\src\scene.cpp(434,68): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\victo\OneDrive\Desktop\openGL\Project\src\scene.cpp(447,80): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\victo\OneDrive\Desktop\openGL\Project\src\scene.cpp(448,84): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\xmemory(696,103): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+          with
+          [
+              _Ty=double
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\vector(689): message : see reference to function template instantiation 'void std::_Default_allocator_traits<_Alloc>::construct<_Ty,kataevic::Model*,kataevic::Material&,glm::vec<3,float,glm::packed_highp>,glm::vec<3,float,glm::packed_highp>,double>(_Alloc &,_Objty *const ,kataevic::Model *&&,kataevic::Material &,glm::vec<3,float,glm::packed_highp> &&,glm::vec<3,float,glm::packed_highp> &&,double &&)' being compiled
+          with
+          [
+              _Alloc=std::allocator<kataevic::Entity>,
+              _Ty=kataevic::Entity,
+              _Objty=kataevic::Entity
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\vector(694): message : see reference to function template instantiation 'void std::_Default_allocator_traits<_Alloc>::construct<_Ty,kataevic::Model*,kataevic::Material&,glm::vec<3,float,glm::packed_highp>,glm::vec<3,float,glm::packed_highp>,double>(_Alloc &,_Objty *const ,kataevic::Model *&&,kataevic::Material &,glm::vec<3,float,glm::packed_highp> &&,glm::vec<3,float,glm::packed_highp> &&,double &&)' being compiled
+          with
+          [
+              _Alloc=std::allocator<kataevic::Entity>,
+              _Ty=kataevic::Entity,
+              _Objty=kataevic::Entity
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\vector(707): message : see reference to function template instantiation 'void std::vector<kataevic::Entity,std::allocator<kataevic::Entity>>::_Emplace_back_with_unused_capacity<_Ty,kataevic::Material&,glm::vec<3,float,glm::packed_highp>,glm::vec<3,float,glm::packed_highp>,double>(_Ty &&,kataevic::Material &,glm::vec<3,float,glm::packed_highp> &&,glm::vec<3,float,glm::packed_highp> &&,double &&)' being compiled
+          with
+          [
+              _Ty=kataevic::Model *
+          ]
+C:\Users\victo\OneDrive\Desktop\openGL\Project\src\scene.cpp(155): message : see reference to function template instantiation 'void std::vector<kataevic::Entity,std::allocator<kataevic::Entity>>::emplace_back<_Ty*,kataevic::Material&,glm::vec3,glm::vec3,genType>(_Ty *&&,kataevic::Material &,glm::vec3 &&,glm::vec3 &&,genType &&)' being compiled
+          with
+          [
+              _Ty=kataevic::Model,
+              genType=double
+          ]
+  Generating code
+  11 of 1313 functions ( 0.8%) were compiled, the rest were copied from previous compilation.
+    10 functions were new in current compilation
+    10 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  Project.vcxproj -> C:\Users\victo\OneDrive\Desktop\openGL\Project\x64\Release\Project.exe

@@ -12,32 +12,24 @@
 float deltaTime = 0;
 float lastFrame = 0;
 
-//scene.GetCamera() scene.GetCamera()(glm::vec3(0.0, 0.0, 3.0));
 float lastX = SCREEN_WIDTH / 2.0f;
 float lastY = SCREEN_HEIGHT / 2.0f;
 bool firstMouse = true;
-bool disabled = true;
-//bool pressed_before = false;
-
-glm::vec3 g_LightPos(1.0f, 1.0f, 1.3f);
-float yPos = 0.0f;
 
 bool flashlightPressed = false;
 bool cameraStaticPressed = false;
 
-Scene scene;
+kataevic::Scene scene;
 
+void init();
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-unsigned int loadTexture(const char* texPath);
-void init();
 GLFWwindow* createWindow(int width, int height, const std::string title);
 void setUpWindow(GLFWwindow* window);
 void processInput(GLFWwindow* window);
 
 void OnRender();
-//void OnUIRender();
 
 
 int main()
@@ -86,51 +78,51 @@ void processInput(GLFWwindow* window)
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-            scene.GetCamera()->ProcessKeyboard(FORWARD, deltaTime * 10);
+            scene.GetCamera()->ProcessKeyboard(kataevic::Camera_Movement::FORWARD, deltaTime * 10);
         else if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-            scene.GetCamera()->ProcessKeyboard(FORWARD, deltaTime * 0.1);
+            scene.GetCamera()->ProcessKeyboard(kataevic::FORWARD, deltaTime * 0.1);
         else
-            scene.GetCamera()->ProcessKeyboard(FORWARD, deltaTime);
+            scene.GetCamera()->ProcessKeyboard(kataevic::Camera_Movement::FORWARD, deltaTime);
 
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
         if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-            scene.GetCamera()->ProcessKeyboard(BACKWARD, deltaTime * 10);
+            scene.GetCamera()->ProcessKeyboard(kataevic::Camera_Movement::BACKWARD, deltaTime * 10);
         else if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-            scene.GetCamera()->ProcessKeyboard(BACKWARD, deltaTime * 0.1);
+            scene.GetCamera()->ProcessKeyboard(kataevic::Camera_Movement::BACKWARD, deltaTime * 0.1);
         else
-            scene.GetCamera()->ProcessKeyboard(BACKWARD, deltaTime);
+            scene.GetCamera()->ProcessKeyboard(kataevic::Camera_Movement::BACKWARD, deltaTime);
 
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
         if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-            scene.GetCamera()->ProcessKeyboard(LEFT, deltaTime * 10);
+            scene.GetCamera()->ProcessKeyboard(kataevic::Camera_Movement::LEFT, deltaTime * 10);
         else if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-            scene.GetCamera()->ProcessKeyboard(LEFT, deltaTime * 0.1);
+            scene.GetCamera()->ProcessKeyboard(kataevic::Camera_Movement::LEFT, deltaTime * 0.1);
         else
-            scene.GetCamera()->ProcessKeyboard(LEFT, deltaTime);
+            scene.GetCamera()->ProcessKeyboard(kataevic::Camera_Movement::LEFT, deltaTime);
 
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-            scene.GetCamera()->ProcessKeyboard(RIGHT, deltaTime * 10);
+            scene.GetCamera()->ProcessKeyboard(kataevic::Camera_Movement::RIGHT, deltaTime * 10);
         else if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-            scene.GetCamera()->ProcessKeyboard(RIGHT, deltaTime * 0.1);
+            scene.GetCamera()->ProcessKeyboard(kataevic::Camera_Movement::RIGHT, deltaTime * 0.1);
         else
-            scene.GetCamera()->ProcessKeyboard(RIGHT, deltaTime);
+            scene.GetCamera()->ProcessKeyboard(kataevic::Camera_Movement::RIGHT, deltaTime);
 
     if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
         if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-            scene.GetCamera()->ProcessKeyboard(UP, deltaTime * 10);
+            scene.GetCamera()->ProcessKeyboard(kataevic::Camera_Movement::UP, deltaTime * 10);
         else if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-            scene.GetCamera()->ProcessKeyboard(UP, deltaTime * 0.1);
+            scene.GetCamera()->ProcessKeyboard(kataevic::Camera_Movement::UP, deltaTime * 0.1);
         else
-            scene.GetCamera()->ProcessKeyboard(UP, deltaTime);
+            scene.GetCamera()->ProcessKeyboard(kataevic::Camera_Movement::UP, deltaTime);
 
     if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
         if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-            scene.GetCamera()->ProcessKeyboard(DOWN, deltaTime * 10);
+            scene.GetCamera()->ProcessKeyboard(kataevic::Camera_Movement::DOWN, deltaTime * 10);
         else if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-            scene.GetCamera()->ProcessKeyboard(DOWN, deltaTime * 0.1);
+            scene.GetCamera()->ProcessKeyboard(kataevic::Camera_Movement::DOWN, deltaTime * 0.1);
         else
-            scene.GetCamera()->ProcessKeyboard(DOWN, deltaTime);
+            scene.GetCamera()->ProcessKeyboard(kataevic::Camera_Movement::DOWN, deltaTime);
 
     if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
         scene.SetMainCamera(0);
@@ -143,11 +135,6 @@ void processInput(GLFWwindow* window)
     
     if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
         scene.SetMainCamera(3);
-
-    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-        yPos += 0.1f;
-    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-        yPos -= 0.1f;
 
     if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
         flashlightPressed = true;
@@ -165,8 +152,6 @@ void processInput(GLFWwindow* window)
         scene.GetCamera()->ToggleStatic();
         cameraStaticPressed = false;
     }
-
-
 }
 
 
