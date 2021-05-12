@@ -159,8 +159,6 @@ public:
 
 		m_Map->Draw(m_Shaders[SHADER_LIGHTING]);
 
-		std::cout << m_MainCamera->Position.x << " " << m_MainCamera->Position.y << " " << m_MainCamera->Position.z << std::endl;
-
 		for (auto& entity : m_Entities)
 		{
 			if (entity.GetModel() == &m_Models[MSHIP])

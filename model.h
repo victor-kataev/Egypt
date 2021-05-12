@@ -17,7 +17,7 @@
 	#include "stb/stb_image.h"
 #endif
 
-unsigned int TextureFromFile(const char* path, const std::string& directory, bool gamma = false);
+unsigned int TextureFromFile(const char* path, const std::string& directory);
 
 class Model
 {
@@ -200,11 +200,11 @@ private:
 	}
 };
 
-unsigned int TextureFromFile(const char* path, const std::string& directory, bool gamma)
+unsigned int TextureFromFile(const char* path, const std::string& directory)
 {
 	std::string filename = std::string(path);
 	filename = directory + '/' + filename;
-	std::cout << "filename = " << filename << " $" << std::endl;
+	std::cout << "texture loaded: " << filename <<  std::endl;
 
 	unsigned int textureID;
 	glGenTextures(1, &textureID);

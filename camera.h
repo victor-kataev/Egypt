@@ -7,7 +7,6 @@
 
 #include "params.h"
 
-// Defines several possible options for camera movement. Used as abstraction to stay away from window-system specific input methods
 enum Camera_Movement {
     FORWARD,
     BACKWARD,
@@ -18,11 +17,9 @@ enum Camera_Movement {
 };
 
 
-// An abstract camera class that processes input and calculates the corresponding Euler Angles, Vectors and Matrices for use in OpenGL
 class Camera
 {
 public:
-    // camera Attributes
     glm::mat4 ProjectionMat;
     glm::vec3 Position;
     glm::vec3 Front;
@@ -32,11 +29,9 @@ public:
     bool Static;
     bool Movable;
     
-    // euler Angles
     float Yaw;
     float Pitch;
     
-    // camera options
     float MovementSpeed;
     float MouseSensitivity;
     float Zoom;
@@ -107,7 +102,6 @@ public:
         Yaw += xoffset;
         Pitch += yoffset;
 
-        // make sure that when pitch is out of bounds, screen doesn't get flipped
         if (constrainPitch)
         {
             if (Pitch > 89.0f)
@@ -116,7 +110,6 @@ public:
                 Pitch = -89.0f;
         }
 
-        // update Front, Right and Up Vectors using the updated Euler angles
         updateCameraVectors();
     }
 
@@ -145,16 +138,14 @@ public:
     }
 
 private:
-    // calculates the front vector from the Camera's (updated) Euler Angles
     void updateCameraVectors()
     {
-        // calculate the new Front vector
         glm::vec3 front;
         front.x = cos(glm::radians(Yaw)) * cos(glm::radians(Pitch));
         front.y = sin(glm::radians(Pitch));
         front.z = sin(glm::radians(Yaw)) * cos(glm::radians(Pitch));
         Front = glm::normalize(front);
-        // also re-calculate the Right and Up vector
+
         Right = glm::normalize(glm::cross(Front, WorldUp));  // normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
         Up = glm::normalize(glm::cross(Right, Front));
     }

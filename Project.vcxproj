@@ -157,7 +157,6 @@
     <ClInclude Include="entity.h" />
     <ClInclude Include="map.h" />
     <ClInclude Include="material.h" />
-    <ClInclude Include="materials.h" />
     <ClInclude Include="mesh.h" />
     <ClInclude Include="model.h" />
     <ClInclude Include="params.h" />

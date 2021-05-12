@@ -186,11 +186,6 @@ private:
 				delete[] m_Data;
 		}
 
-		//void Create(unsigned char* img, int width, int height)
-		//{
-		//	Heightfield(img, width, height);
-		//}
-
 		void Clear()
 		{
 			m_HfDim = glm::ivec2(0.0);
