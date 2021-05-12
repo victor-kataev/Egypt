@@ -3,7 +3,7 @@
 static unsigned int TextureFromFile(const char* path, const std::string& directory, bool gamma = false)
 {
 	std::string filename = std::string(path);
-	filename = directory + '/' + filename;
+	filename = directory + filename;
 	std::cout << "texture loaded: " << filename << std::endl;
 
 	unsigned int textureID;
@@ -42,6 +42,7 @@ static unsigned int TextureFromFile(const char* path, const std::string& directo
 }
 
 Model::Model(const char* path)
+	: m_Directory("resources/textures/")
 {
 	loadModel(path);
 }
@@ -105,7 +106,6 @@ void Model::loadModel(std::string path)
 		std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
 		return;
 	}
-	m_Directory = path.substr(0, path.find_last_of('/'));
 
 	processNode(scene->mRootNode, scene);
 }

@@ -149,30 +149,33 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="camera.cpp" />
-    <ClCompile Include="entity.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="map.cpp" />
-    <ClCompile Include="material.cpp" />
-    <ClCompile Include="mesh.cpp" />
-    <ClCompile Include="model.cpp" />
-    <ClCompile Include="scene.cpp" />
-    <ClCompile Include="shader.cpp" />
+    <ClCompile Include="src\camera.cpp" />
+    <ClCompile Include="src\entity.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\map.cpp" />
+    <ClCompile Include="src\material.cpp" />
+    <ClCompile Include="src\mesh.cpp" />
+    <ClCompile Include="src\model.cpp" />
+    <ClCompile Include="src\scene.cpp" />
+    <ClCompile Include="src\shader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="camera.h" />
-    <ClInclude Include="entity.h" />
-    <ClInclude Include="map.h" />
-    <ClInclude Include="material.h" />
-    <ClInclude Include="mesh.h" />
-    <ClInclude Include="model.h" />
-    <ClInclude Include="params.h" />
-    <ClInclude Include="scene.h" />
-    <ClInclude Include="shader.h" />
-    <ClInclude Include="utilities.h" />
+    <ClInclude Include="src\camera.h" />
+    <ClInclude Include="src\entity.h" />
+    <ClInclude Include="src\map.h" />
+    <ClInclude Include="src\material.h" />
+    <ClInclude Include="src\mesh.h" />
+    <ClInclude Include="src\model.h" />
+    <ClInclude Include="src\params.h" />
+    <ClInclude Include="src\scene.h" />
+    <ClInclude Include="src\shader.h" />
+    <ClInclude Include="src\utilities.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="logo.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

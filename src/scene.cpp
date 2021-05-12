@@ -477,15 +477,15 @@ void Scene::bindScene()
 
 void Scene::uploadModels()
 {
-	m_Models.emplace_back("resources/models/egypt/pyramid1.obj");
-	m_Models.emplace_back("resources/models/egypt/pyramid2.obj");
-	m_Models.emplace_back("resources/models/egypt/pyramid3.obj");
-	m_Models.emplace_back("resources/models/egypt/temple1.obj");
-	m_Models.emplace_back("resources/models/egypt/temple2.obj");
-	m_Models.emplace_back("resources/models/egypt/temple3.obj");
-	m_Models.emplace_back("resources/models/egypt/obelisk.obj");
-	m_Models.emplace_back("resources/models/egypt/houses3.obj");
-	m_Models.emplace_back("resources/models/egypt/ship.obj");
+	m_Models.emplace_back("resources/models/pyramid1.obj");
+	m_Models.emplace_back("resources/models/pyramid2.obj");
+	m_Models.emplace_back("resources/models/pyramid3.obj");
+	m_Models.emplace_back("resources/models/temple1.obj");
+	m_Models.emplace_back("resources/models/temple2.obj");
+	m_Models.emplace_back("resources/models/temple3.obj");
+	m_Models.emplace_back("resources/models/obelisk.obj");
+	m_Models.emplace_back("resources/models/houses3.obj");
+	m_Models.emplace_back("resources/models/ship.obj");
 
 
 	Model woodenBox;
